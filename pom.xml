@@ -42,7 +42,7 @@
 
         <!-- Linters -->
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
-        <checkstyle.version>10.12.7</checkstyle.version>
+        <checkstyle.version>10.13.0</checkstyle.version>
     </properties>
 
     <modules>
