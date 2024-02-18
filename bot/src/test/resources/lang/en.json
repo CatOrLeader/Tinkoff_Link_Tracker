@@ -1,0 +1,20 @@
+{
+    "main_menu": "You are in the menu now!\nSee the commands **below**",
+    "user_uninitialized": "You are not registered yet\nType **/start** to set your account",
+    "user_registered": "\uD83D\uDC4B \nYou are a newbie here, right?\nNow, your account is set up, and you can use the bot",
+    "user_registered_suggestion": "\uD83D\uDCA8 Check what this bot can do using the **/help** command",
+    "user_already_registered": "Your account has already been created",
+    "res_track_waiting": "You are trying to subscribe to a new resource.\n\n_Send the link to the chat, and the bot will remember it_ \uD83E\uDD16",
+    "res_track_success": "Now you are subscribed to the resource. \nYou can check your resources by using the command **/list**",
+    "res_untrack_waiting": "\uD83D\uDCAD Want to delete one of your tracking resources? \nPress the button to choose which one you want to unsubscribe from",
+    "res_untrack_success": "✅ Now you are unsubscribed from the resource. \nYou can check your resources by using the command **/list**",
+    "res_typing_error": "Something went wrong. Please try again or go back to the menu",
+    "incorrect_msg": "I've never heard something like that... However, your message is unsupported for now",
+    "commands": "***Commands***\n**/start** - Register in the bot\n**/help** - What this bot can do\n**/track** - Register new resource to track\n**/untrack** - Remove resource from tracking\n**/list** - List all your tracked resources",
+    "btn_remove": "Remove ❌",
+    "btn_new_res": "✏ Track new resource",
+    "btn_res_rem": "\uD83D\uDDE1 Remove resource",
+    "btn_list": "\uD83D\uDDD2 List tracked resources",
+    "no_res_yet": "\uD83D\uDCED There are no tracked resources yet",
+    "tracked_res": "Tracked resources"
+}
