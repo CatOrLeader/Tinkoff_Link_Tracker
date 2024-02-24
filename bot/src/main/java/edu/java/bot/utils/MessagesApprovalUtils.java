@@ -22,7 +22,7 @@ public final class MessagesApprovalUtils {
     }
 
     public static boolean isCorrectResource(Message received) {
-        final String regexForLink = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        final String regexForLink = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
         return isMsgExists(received) && received.text().strip().matches(regexForLink);
     }
 }

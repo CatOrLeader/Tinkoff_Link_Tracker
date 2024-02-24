@@ -46,8 +46,8 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
         var callbackQuery = update.callbackQuery();
         var userId = userData.getUserID();
 
-        String linkUrlStr = BotResponsesUtils.extractLinkFromCallbackQuery(callbackQuery);
-        linksTracker.removeUserLinkByUrl(userId, linkUrlStr);
+        int linkUrlStr = BotResponsesUtils.extractLinkCodeFromCallbackQuery(callbackQuery);
+        linksTracker.removeUserLinkByCode(userId, linkUrlStr);
 
         var response = constructTemplateResponse(update, userData);
         setStateToLogicallyNext(response, userData);

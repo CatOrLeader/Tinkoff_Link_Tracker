@@ -39,8 +39,8 @@ public class UserLinksTrackerTest {
 
     @Test
     @Order(3)
-    void givenLinkToDelete_thenDeletedCorrectly() {
-        linksTracker.removeUserLinkByUrl(USER_ID, link.url());
+    void givenLinkCodeToDelete_thenDeletedCorrectly() {
+        linksTracker.removeUserLinkByCode(USER_ID, link.hashCode());
 
         assertThat(linksTracker.getUserLinks(USER_ID)).isEmpty();
     }

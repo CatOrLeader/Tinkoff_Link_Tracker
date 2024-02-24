@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ResToUntrackReceivedHandlerTest {
     private static final long USER_ID = 10L;
     private static final String CORRECT_RES = "https://github.com";
-    private static final String CORRECT_QUERY = "cancel " + CORRECT_RES;
+    private static final String CORRECT_QUERY = "cancel " + CORRECT_RES.hashCode();
     private static final UserData USER_DATA = UserData.constructInitialFromId(USER_ID);
     private static final Link LINK = new Link(CORRECT_RES, Instant.now());
 

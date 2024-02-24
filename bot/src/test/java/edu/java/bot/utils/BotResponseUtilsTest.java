@@ -15,12 +15,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 public class BotResponseUtilsTest {
     @Test
     void givenCorrectQueryData_thenReceiveLink() {
-        String queryContent = "cancel https://github.com";
+        String link = "https://github.com";
+        String queryContent = "cancel " + link.hashCode();
         CallbackQuery query = Mockito.mock(CallbackQuery.class);
         Mockito.when(query.data()).thenReturn(queryContent);
 
-        String expectedValue = "https://github.com";
-        String actualValue = BotResponsesUtils.extractLinkFromCallbackQuery(query);
+        int expectedValue = link.hashCode();
+        int actualValue = BotResponsesUtils.extractLinkCodeFromCallbackQuery(query);
 
         assertThat(actualValue).isEqualTo(expectedValue);
     }
@@ -32,7 +33,7 @@ public class BotResponseUtilsTest {
         Mockito.when(query.data()).thenReturn(queryContent);
 
         assertThatExceptionOfType(IndexOutOfBoundsException.class)
-            .isThrownBy(() -> BotResponsesUtils.extractLinkFromCallbackQuery(query));
+            .isThrownBy(() -> BotResponsesUtils.extractLinkCodeFromCallbackQuery(query));
     }
 
     @Test

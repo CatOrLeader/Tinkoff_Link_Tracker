@@ -33,8 +33,8 @@ public final class BotResponsesUtils {
         return responsesAll;
     }
 
-    public static @NotNull String extractLinkFromCallbackQuery(@NotNull CallbackQuery query) {
-        return query.data().strip().substring("cancel".length() + 1);
+    public static int extractLinkCodeFromCallbackQuery(@NotNull CallbackQuery query) {
+        return Integer.parseInt(query.data().strip().substring("cancel".length() + 1));
     }
 
     public static @NotNull String decorateLink(@NotNull String link, int maxLength) {
