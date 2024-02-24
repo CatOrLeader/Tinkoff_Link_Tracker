@@ -65,8 +65,8 @@ public final class UntrackHandler implements UpdateHandler {
             return new SendMessage[] {
                 new SendMessage(
                     userId,
-                    answersProvider.resUnregisterWaiting(userLocale)
-                ).parseMode(ParseMode.Markdown),
+                    answersProvider.transitionUntrackWaiting(userLocale)
+                ).replyMarkup(keyboard.goBack(userLocale)).parseMode(ParseMode.Markdown),
                 new SendMessage(
                     userId,
                     answersProvider.trackedResources(userLocale)

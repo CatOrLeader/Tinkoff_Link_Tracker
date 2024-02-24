@@ -45,8 +45,18 @@ public final class ResToTrackReceivedHandler implements UpdateHandler {
             return Optional.empty();
         }
 
-        var response = constructTemplateResponse(update, userData);
-        setStateToLogicallyNext(response, userData);
+        String maybeQuery = update.message().text();
+        Optional<UpdateHandler> maybeHandler = getAppropriateHandler(maybeQuery, userData);
+        BaseRequest[] response;
+
+        if (maybeHandler.isPresent()) {
+            var handler = maybeHandler.get();
+            response = handler.constructTemplateResponse(update, userData);
+            handler.setStateToLogicallyNext(response, userData);
+        } else {
+            response = constructTemplateResponse(update, userData);
+            setStateToLogicallyNext(response, userData);
+        }
 
         return Optional.of(response);
     }
@@ -65,10 +75,12 @@ public final class ResToTrackReceivedHandler implements UpdateHandler {
             ).replyToMessageId(update.message().messageId()).parseMode(ParseMode.Markdown)};
             return BotResponsesUtils.concatenate(response, menuHandler.constructTemplateResponse(update, userData));
         } else {
-            return new BaseRequest[] {new SendMessage(
-                userData.getUserID(),
-                answersProvider.resTypingError(userLocale)
-            ).replyToMessageId(update.message().messageId()).parseMode(ParseMode.Markdown)};
+            return new BaseRequest[] {
+                new SendMessage(
+                    userData.getUserID(),
+                    answersProvider.resTypingError(userLocale)
+                ).replyToMessageId(update.message().messageId()).parseMode(ParseMode.Markdown)
+            };
         }
     }
 
@@ -76,6 +88,15 @@ public final class ResToTrackReceivedHandler implements UpdateHandler {
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
         if (responses.length > 1) {
             userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        }
+    }
+
+    private Optional<UpdateHandler> getAppropriateHandler(String query, UserData userData) {
+        Locale userLocale = userData.getLocale();
+        if (query.contentEquals(answersProvider.goBackBtn(userLocale))) {
+            return Optional.of(menuHandler);
+        } else {
+            return Optional.empty();
         }
     }
 }

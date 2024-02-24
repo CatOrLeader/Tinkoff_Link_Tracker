@@ -31,6 +31,12 @@ public final class Keyboard {
         ).addRow(new KeyboardButton(answersProvider.listResBtn(userLocale))).resizeKeyboard(true);
     }
 
+    public @NotNull ReplyKeyboardMarkup goBack(@NotNull Locale userLocale) {
+        return new ReplyKeyboardMarkup(
+            new KeyboardButton(answersProvider.goBackBtn(userLocale))
+        ).resizeKeyboard(true);
+    }
+
     public @NotNull InlineKeyboardMarkup userLinks(@NotNull Set<Link> links) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
