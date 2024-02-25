@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.stackoverflow.deserializers.QuestionJsonDeserializer;
-import edu.java.stackoverflow.response.QuestionResponse;
+import edu.java.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

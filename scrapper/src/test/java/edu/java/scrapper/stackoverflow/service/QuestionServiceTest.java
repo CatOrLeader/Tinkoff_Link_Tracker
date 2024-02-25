@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.configuration.ClientConfiguration;
-import edu.java.stackoverflow.response.QuestionResponse;
+import edu.java.stackoverflow.model.QuestionResponse;
 import edu.java.stackoverflow.service.QuestionService;
 import java.io.IOException;
 import java.nio.file.Files;

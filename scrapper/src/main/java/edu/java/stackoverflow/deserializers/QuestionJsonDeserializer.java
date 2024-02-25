@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import edu.java.stackoverflow.response.QuestionResponse;
+import edu.java.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;

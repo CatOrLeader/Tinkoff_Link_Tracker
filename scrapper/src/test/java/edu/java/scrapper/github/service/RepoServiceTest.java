@@ -3,7 +3,7 @@ package edu.java.scrapper.github.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.configuration.ClientConfiguration;
-import edu.java.github.response.RepoResponse;
+import edu.java.github.model.RepoResponse;
 import edu.java.github.service.RepoService;
 import java.io.IOException;
 import java.nio.file.Files;

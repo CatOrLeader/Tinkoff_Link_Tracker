@@ -1,4 +1,4 @@
-package edu.java.stackoverflow.response;
+package edu.java.stackoverflow.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
