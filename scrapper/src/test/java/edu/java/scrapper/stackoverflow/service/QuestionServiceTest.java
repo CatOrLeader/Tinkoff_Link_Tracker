@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.configuration.ClientConfiguration;
-import edu.java.stackoverflow.dto.QuestionDTO;
+import edu.java.stackoverflow.response.QuestionResponse;
 import edu.java.stackoverflow.service.QuestionService;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,12 +60,12 @@ public class QuestionServiceTest {
             )
         );
 
-        QuestionDTO expectedValue = new QuestionDTO(
+        QuestionResponse expectedValue = new QuestionResponse(
             "https://stackoverflow.com/questions/1495666/how-can-i-define-a-class-in-python",
             "How can I define a class in Python?",
             OffsetDateTime.parse("2020-03-16T09:45:48+00:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         );
-        QuestionDTO actualValue = service.getQuestionById("1234");
+        QuestionResponse actualValue = service.getQuestionById("1234");
 
         assertThat(actualValue).isEqualTo(expectedValue);
     }

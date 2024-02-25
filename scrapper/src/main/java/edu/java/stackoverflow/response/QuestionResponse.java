@@ -1,4 +1,4 @@
-package edu.java.stackoverflow.dto;
+package edu.java.stackoverflow.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,7 +12,7 @@ import lombok.Data;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonDeserialize(using = QuestionJsonDeserializer.class)
-public class QuestionDTO {
+public class QuestionResponse {
     private String url;
     private String title;
     private OffsetDateTime lastActivityDate;

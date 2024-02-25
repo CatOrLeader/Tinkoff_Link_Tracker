@@ -3,7 +3,7 @@ package edu.java.scrapper.github.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.configuration.ClientConfiguration;
-import edu.java.github.dto.RepoDTO;
+import edu.java.github.response.RepoResponse;
 import edu.java.github.service.RepoService;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,12 +61,12 @@ public class RepoServiceTest {
             )
         );
 
-        RepoDTO expectedValue = new RepoDTO(
+        RepoResponse expectedValue = new RepoResponse(
             "https://api.github.com/repos/CatOrLeader/Tinkoff_Link_Tracker/pulls/2",
             "HW #1",
             OffsetDateTime.parse("2024-02-18T19:21:18Z")
         );
-        RepoDTO actualValue = service.getRepoByOwnerNameNumber("CatOrLeader", "Tinkoff_Link_Tracker", 2);
+        RepoResponse actualValue = service.getRepoByOwnerNameNumber("CatOrLeader", "Tinkoff_Link_Tracker", 2);
 
         assertThat(actualValue).isEqualTo(expectedValue);
     }

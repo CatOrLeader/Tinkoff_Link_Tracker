@@ -1,4 +1,4 @@
-package edu.java.github.dto;
+package edu.java.github.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RepoDTO {
+public class RepoResponse {
     private String url;
     private String title;
     private OffsetDateTime updatedAt;
