@@ -1,6 +1,6 @@
-package edu.java.github.service;
+package edu.java.scrapper.github.service;
 
-import edu.java.github.model.RepoResponse;
+import edu.java.scrapper.github.model.RepoResponse;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;

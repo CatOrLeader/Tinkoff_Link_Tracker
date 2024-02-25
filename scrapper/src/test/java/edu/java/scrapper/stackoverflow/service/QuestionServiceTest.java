@@ -3,9 +3,8 @@ package edu.java.scrapper.stackoverflow.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import edu.java.configuration.ClientConfiguration;
-import edu.java.stackoverflow.model.QuestionResponse;
-import edu.java.stackoverflow.service.QuestionService;
+import edu.java.scrapper.configuration.ClientConfiguration;
+import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +38,7 @@ public class QuestionServiceTest {
 
     @BeforeAll
     static void tearUp() throws IOException {
-        Path resourceDir = Paths.get("src", "test", "resources", "edu", "java", "stackoverflow");
+        Path resourceDir = Paths.get("src", "test", "resources", "edu", "java", "scrapper", "stackoverflow");
         Path questionAnswerFile = Paths.get(resourceDir.toAbsolutePath().toString(), "question_answer.json");
 
         JSON_BODY = Files.readString(questionAnswerFile);

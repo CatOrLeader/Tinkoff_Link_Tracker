@@ -3,8 +3,7 @@ package edu.java.scrapper.stackoverflow.deserializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.java.stackoverflow.deserializers.QuestionJsonDeserializer;
-import edu.java.stackoverflow.model.QuestionResponse;
+import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +19,7 @@ public class QuestionJsonDeserializerTest {
 
     @BeforeAll
     static void tearUp() throws IOException {
-        Path resourceDir = Paths.get("src", "test", "resources", "edu", "java", "stackoverflow");
+        Path resourceDir = Paths.get("src", "test", "resources", "edu", "java", "scrapper", "stackoverflow");
         Path questionAnswerFile = Paths.get(resourceDir.toAbsolutePath().toString(), "question_answer.json");
 
         JSON_BODY = Files.readString(questionAnswerFile);

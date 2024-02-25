@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.scrapper.configuration;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
-package edu.java.stackoverflow.model;
+package edu.java.scrapper.stackoverflow.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import edu.java.stackoverflow.deserializers.QuestionJsonDeserializer;
+import edu.java.scrapper.stackoverflow.deserializers.QuestionJsonDeserializer;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;

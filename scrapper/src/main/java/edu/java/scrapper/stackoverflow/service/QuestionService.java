@@ -1,6 +1,6 @@
-package edu.java.stackoverflow.service;
+package edu.java.scrapper.stackoverflow.service;
 
-import edu.java.stackoverflow.model.QuestionResponse;
+import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;

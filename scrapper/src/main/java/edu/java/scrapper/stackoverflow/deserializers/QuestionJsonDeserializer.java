@@ -1,10 +1,10 @@
-package edu.java.stackoverflow.deserializers;
+package edu.java.scrapper.stackoverflow.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import edu.java.stackoverflow.model.QuestionResponse;
+import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
