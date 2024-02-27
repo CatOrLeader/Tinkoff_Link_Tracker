@@ -23,8 +23,8 @@ public final class UserLinksTracker {
         linkLib.get(userId).add(link);
     }
 
-    public void removeUserLinkByUrl(long userId, @NotNull String url) {
-        linkLib.get(userId).removeIf(link -> link.url().equals(url));
+    public void removeUserLinkByCode(long userId, int code) {
+        getUserLinks(userId).removeIf(link -> link.hashCode() == code);
     }
 
     public @NotNull Set<Link> getUserLinks(long userId) {

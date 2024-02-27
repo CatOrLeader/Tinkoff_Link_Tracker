@@ -12,6 +12,7 @@ import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
 import edu.java.bot.utils.BotResponsesUtils;
 import edu.java.bot.utils.MessagesApprovalUtils;
+import java.util.Locale;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,16 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {
+        if (MessagesApprovalUtils.isMsgExists(update.message())) {
+            var maybeHandler = getAppropriateHandler(update.message().text(), userData);
+            if (maybeHandler.isPresent()) {
+                var handler = maybeHandler.get();
+                var response = handler.constructTemplateResponse(update, userData);
+                handler.setStateToLogicallyNext(response, userData);
+                return Optional.ofNullable(response);
+            }
+        }
+
         if (!MessagesApprovalUtils.isCallbackQueryExists(update)) {
             return Optional.empty();
         }
@@ -46,8 +57,8 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
         var callbackQuery = update.callbackQuery();
         var userId = userData.getUserID();
 
-        String linkUrlStr = BotResponsesUtils.extractLinkFromCallbackQuery(callbackQuery);
-        linksTracker.removeUserLinkByUrl(userId, linkUrlStr);
+        int linkUrlStr = BotResponsesUtils.extractLinkCodeFromCallbackQuery(callbackQuery);
+        linksTracker.removeUserLinkByCode(userId, linkUrlStr);
 
         var response = constructTemplateResponse(update, userData);
         setStateToLogicallyNext(response, userData);
@@ -69,5 +80,14 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
     @Override
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
         userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+    }
+
+    private Optional<UpdateHandler> getAppropriateHandler(String query, UserData userData) {
+        Locale userLocale = userData.getLocale();
+        if (query.contentEquals(answersProvider.goBackBtn(userLocale))) {
+            return Optional.of(menuHandler);
+        } else {
+            return Optional.empty();
+        }
     }
 }

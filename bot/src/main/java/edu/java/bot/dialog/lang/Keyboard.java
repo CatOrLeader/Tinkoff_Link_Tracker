@@ -31,6 +31,12 @@ public final class Keyboard {
         ).addRow(new KeyboardButton(answersProvider.listResBtn(userLocale))).resizeKeyboard(true);
     }
 
+    public @NotNull ReplyKeyboardMarkup goBack(@NotNull Locale userLocale) {
+        return new ReplyKeyboardMarkup(
+            new KeyboardButton(answersProvider.goBackBtn(userLocale))
+        ).resizeKeyboard(true);
+    }
+
     public @NotNull InlineKeyboardMarkup userLinks(@NotNull Set<Link> links) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
@@ -39,7 +45,7 @@ public final class Keyboard {
                 new InlineKeyboardButton(BotResponsesUtils.decorateLink(link.url(), MAX_LINK_LENGTH))
                     .callbackData(String.format(
                         CALLBACK_INFO,
-                        link.url()
+                        link.hashCode()
                     ))
                     .url(link.url())
             );
@@ -59,11 +65,11 @@ public final class Keyboard {
                 new InlineKeyboardButton(BotResponsesUtils.decorateLink(link.url(), MAX_LINK_LENGTH))
                     .callbackData(String.format(
                         CALLBACK_INFO,
-                        link.url()
+                        link.hashCode()
                     ))
                     .url(link.url()),
                 new InlineKeyboardButton(answersProvider.removeBtn(userLocale))
-                    .callbackData(String.format(CALLBACK_REMOVE, link.url()))
+                    .callbackData(String.format(CALLBACK_REMOVE, link.hashCode()))
             );
         }
 

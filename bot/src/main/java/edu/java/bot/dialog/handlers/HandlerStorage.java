@@ -29,6 +29,7 @@ public class HandlerStorage {
 
         handlers.put(BotState.UNINITIALIZED, handlerMap.get("uninitializedHandler"));
         handlers.put(BotState.MAIN_MENU, handlerMap.get("mainMenuHandler"));
+        handlers.put(BotState.RES_LIST, handlerMap.get("resListHandler"));
         handlers.put(BotState.RES_TRACK_WAITING, handlerMap.get("resToTrackReceivedHandler"));
         handlers.put(BotState.RES_UNTRACK_WAITING, handlerMap.get("resToUntrackReceivedHandler"));
 

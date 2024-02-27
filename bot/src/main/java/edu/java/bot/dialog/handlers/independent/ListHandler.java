@@ -54,15 +54,28 @@ public final class ListHandler implements UpdateHandler {
         var userLocale = userData.getLocale();
         var links = linksTracker.getUserLinks(userId);
 
-        var response = links.isEmpty()
-            ? new SendMessage(userId, answersProvider.noResYet(userLocale))
-            : new SendMessage(userId, "Your links").replyMarkup(keyboard.userLinks(links));
-        return new SendMessage[] {response};
+        if (links.isEmpty()) {
+            return new SendMessage[] {new SendMessage(userId, answersProvider.noResYet(userLocale))};
+        }
+
+        return new BaseRequest[] {
+            new SendMessage(
+                userId,
+                answersProvider.transitionList(userLocale)
+            ).replyMarkup(keyboard.goBack(userLocale)),
+            new SendMessage(
+                userId, answersProvider.stateList(userLocale)
+            ).replyMarkup(keyboard.userLinks(links))
+        };
     }
 
     @Override
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
-        userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        if (responses.length > 1) {
+            userDataStorage.setUserState(userData, BotState.RES_LIST);
+        } else {
+            userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        }
     }
 
     private boolean isInappropriateRequest(Update update, UserData userData) {

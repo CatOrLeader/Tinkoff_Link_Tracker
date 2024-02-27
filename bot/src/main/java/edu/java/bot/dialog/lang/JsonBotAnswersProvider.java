@@ -75,27 +75,32 @@ public final class JsonBotAnswersProvider implements BotAnswersProvider {
 
     @Override
     public String resRegisterWaiting(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("res_track_waiting");
+        return runtimeAnswersMap.get(locale).get("state_track_waiting");
     }
 
     @Override
     public String resRegisteredSuccess(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("res_track_success");
+        return runtimeAnswersMap.get(locale).get("state_track_success");
     }
 
     @Override
-    public String resUnregisterWaiting(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("res_untrack_waiting");
+    public String transitionUntrackWaiting(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("transition_untrack_waiting");
     }
 
     @Override
     public String resUnregisterSuccess(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("res_untrack_success");
+        return runtimeAnswersMap.get(locale).get("state_untrack_success");
     }
 
     @Override
     public String resTypingError(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("res_typing_error");
+        return runtimeAnswersMap.get(locale).get("state_typing_error");
+    }
+
+    @Override
+    public String transitionTrackWaiting(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("transition_track_waiting");
     }
 
     @Override
@@ -129,12 +134,27 @@ public final class JsonBotAnswersProvider implements BotAnswersProvider {
     }
 
     @Override
+    public String goBackBtn(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("btn_go_back");
+    }
+
+    @Override
+    public String transitionList(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("transition_list");
+    }
+
+    @Override
+    public String stateList(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("state_list");
+    }
+
+    @Override
     public String noResYet(@NotNull Locale locale) {
         return runtimeAnswersMap.get(locale).get("no_res_yet");
     }
 
     @Override
     public String trackedResources(@NotNull Locale locale) {
-        return runtimeAnswersMap.get(locale).get("tracked_res");
+        return runtimeAnswersMap.get(locale).get("state_tracked_res");
     }
 }

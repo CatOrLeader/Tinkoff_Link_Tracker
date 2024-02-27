@@ -9,6 +9,7 @@ import edu.java.bot.dialog.data.UserData;
 import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
+import edu.java.bot.dialog.lang.Keyboard;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -16,13 +17,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public final class TrackHandler implements UpdateHandler {
+    private final Keyboard keyboard;
     private final BotAnswersProvider answersProvider;
     private final UserDataStorage userDataStorage;
 
     public TrackHandler(
+        @NotNull Keyboard keyboard,
         @NotNull BotAnswersProvider answersProvider,
         @NotNull UserDataStorage userDataStorage
     ) {
+        this.keyboard = keyboard;
         this.answersProvider = answersProvider;
         this.userDataStorage = userDataStorage;
     }
@@ -41,10 +45,19 @@ public final class TrackHandler implements UpdateHandler {
 
     @Override
     public @NotNull BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
-        return new SendMessage[] {new SendMessage(
-            userData.getUserID(),
-            answersProvider.resRegisterWaiting(userData.getLocale())
-        ).parseMode(ParseMode.Markdown)};
+        var userId = userData.getUserID();
+        var userLocale = userData.getLocale();
+
+        return new SendMessage[] {
+            new SendMessage(
+                userId,
+                answersProvider.transitionTrackWaiting(userLocale)
+            ).replyMarkup(keyboard.goBack(userLocale)).parseMode(ParseMode.Markdown),
+            new SendMessage(
+                userId,
+                answersProvider.resRegisterWaiting(userLocale)
+            ).parseMode(ParseMode.Markdown)
+        };
     }
 
     @Override

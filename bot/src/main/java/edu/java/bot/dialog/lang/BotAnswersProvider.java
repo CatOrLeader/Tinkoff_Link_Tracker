@@ -18,11 +18,13 @@ public sealed interface BotAnswersProvider permits JsonBotAnswersProvider {
 
     String resRegisteredSuccess(@NotNull Locale locale);
 
-    String resUnregisterWaiting(@NotNull Locale locale);
+    String transitionUntrackWaiting(@NotNull Locale locale);
 
     String resUnregisterSuccess(@NotNull Locale locale);
 
     String resTypingError(@NotNull Locale locale);
+
+    String transitionTrackWaiting(@NotNull Locale locale);
 
     String incorrectMessage(@NotNull Locale locale);
 
@@ -35,6 +37,12 @@ public sealed interface BotAnswersProvider permits JsonBotAnswersProvider {
     String remResBtn(@NotNull Locale locale);
 
     String listResBtn(@NotNull Locale locale);
+
+    String goBackBtn(@NotNull Locale locale);
+
+    String transitionList(@NotNull Locale locale);
+
+    String stateList(@NotNull Locale locale);
 
     String noResYet(@NotNull Locale locale);
 
