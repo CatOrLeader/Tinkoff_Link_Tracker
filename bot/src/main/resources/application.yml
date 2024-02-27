@@ -1,5 +1,7 @@
 app:
-  telegram-token: unset
+  telegram-token: ${BOT_TOKEN}
+  on-startup:
+    skip-updates: true
 
 spring:
   application:
