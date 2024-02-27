@@ -1,4 +1,7 @@
 app:
+  clients:
+    github-url: "https://api.github.com"
+    stackoverflow-url: "https://api.stackexchange.com"
   scheduler:
     enable: true
     interval: 10s
