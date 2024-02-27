@@ -9,7 +9,6 @@
     <Appenders>
         <Console name="STDOUT_PLAIN" target="SYSTEM_OUT">
             <PatternLayout
-                disableAnsi="false"
                 pattern="%d{HH:mm:ss.SSS} %highlight{%-5p} [%-30.30thread] %style{%X} %-25.25logger{20} -- %highlight{%m} %n"
             />
         </Console>

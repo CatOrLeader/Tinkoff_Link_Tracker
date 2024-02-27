@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.scrapper.configuration.ClientConfiguration;
 import edu.java.scrapper.github.model.RepoResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,7 +62,7 @@ public class RepoServiceTest {
         );
 
         RepoResponse expectedValue = new RepoResponse(
-            "https://api.github.com/repos/CatOrLeader/Tinkoff_Link_Tracker/pulls/2",
+            URI.create("https://api.github.com/repos/CatOrLeader/Tinkoff_Link_Tracker/pulls/2"),
             "HW #1",
             OffsetDateTime.parse("2024-02-18T19:21:18Z")
         );

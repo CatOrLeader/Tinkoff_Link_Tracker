@@ -1,8 +1,8 @@
-package edu.java.scrapper.api.rest;
+package edu.java.scrapper.rest.api;
 
-import edu.java.scrapper.api.model.AddLinkRequest;
-import edu.java.scrapper.api.model.LinkResponse;
-import edu.java.scrapper.api.model.RemoveLinkRequest;
+import edu.java.scrapper.rest.model.AddLinkRequest;
+import edu.java.scrapper.rest.model.LinkResponse;
+import edu.java.scrapper.rest.model.RemoveLinkRequest;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectPostRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIsOk() {
-        String url = "https://github.com";
+        URI url = URI.create("https://github.com");
 
         ResponseSpec spec = client.post()
             .uri("/links")
@@ -49,8 +49,8 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectPostRequest_whenTgChatIdHeaderIsPresented_thenResponseBodyIsCorrect() {
-        String url = "https://github.com";
-        LinkResponse response = new LinkResponse(0, URI.create(url));
+        URI url = URI.create("https://github.com");
+        LinkResponse response = new LinkResponse(0, url);
 
         ResponseSpec spec = client.post()
             .uri("/links")
@@ -64,7 +64,7 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectPostRequest_whenTgChatIdHeaderIsNotPresented_thenResponseStatusIs400() {
-        String url = "https://github.com";
+        URI url = URI.create("https://github.com");
 
         ResponseSpec spec = client.post()
             .uri("/links")
@@ -77,7 +77,7 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIsOk() {
-        String url = "https://github.com";
+        URI url = URI.create("https://github.com");
 
         ResponseSpec spec = client.method(HttpMethod.DELETE)
             .uri("/links")
@@ -91,8 +91,8 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseBodyIsCorrect() {
-        String url = "https://github.com";
-        LinkResponse response = new LinkResponse(0, URI.create(url));
+        URI url = URI.create("https://github.com");
+        LinkResponse response = new LinkResponse(0, url);
 
         ResponseSpec spec = client.method(HttpMethod.DELETE)
             .uri("/links")
@@ -106,7 +106,7 @@ public class LinksControllerTest {
 
     @Test
     void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIs400() {
-        String url = "https://github.com";
+        URI url = URI.create("https://github.com");
 
         ResponseSpec spec = client.method(HttpMethod.DELETE)
             .uri("/links")

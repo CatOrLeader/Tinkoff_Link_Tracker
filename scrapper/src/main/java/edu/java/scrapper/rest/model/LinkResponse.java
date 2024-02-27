@@ -1,4 +1,4 @@
-package edu.java.scrapper.api.model;
+package edu.java.scrapper.rest.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -14,6 +14,6 @@ import lombok.Setter;
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class LinkResponse {
-    private int id;
+    private long id;
     private URI url;
 }

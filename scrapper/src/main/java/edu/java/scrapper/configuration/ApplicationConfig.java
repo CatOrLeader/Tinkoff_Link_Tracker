@@ -1,6 +1,6 @@
 package edu.java.scrapper.configuration;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,8 +20,9 @@ public record ApplicationConfig(
     }
 
     public record Clients(
-        @NotEmpty String githubUrl,
-        @NotEmpty String stackOverflowUrl
+        @NotBlank String githubUrl,
+        @NotBlank String stackOverflowUrl,
+        @NotBlank String botUrl
     ) {
     }
 }

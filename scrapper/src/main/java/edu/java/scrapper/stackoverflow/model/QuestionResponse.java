@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import edu.java.scrapper.stackoverflow.deserializers.QuestionJsonDeserializer;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonDeserialize(using = QuestionJsonDeserializer.class)
 public class QuestionResponse {
-    private String url;
+    private URI url;
     private String title;
     private OffsetDateTime lastActivityDate;
 }

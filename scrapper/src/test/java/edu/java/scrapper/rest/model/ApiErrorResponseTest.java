@@ -1,4 +1,4 @@
-package edu.java.scrapper.api.model;
+package edu.java.scrapper.rest.model;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

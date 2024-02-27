@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +33,7 @@ public class QuestionJsonDeserializerTest {
         DeserializationContext context = mapper.getDeserializationContext();
 
         QuestionResponse expectedValue = new QuestionResponse(
-            "https://stackoverflow.com/questions/1495666/how-can-i-define-a-class-in-python",
+            URI.create("https://stackoverflow.com/questions/1495666/how-can-i-define-a-class-in-python"),
             "How can I define a class in Python?",
             OffsetDateTime.parse("2020-03-16T09:45:48+00:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         );

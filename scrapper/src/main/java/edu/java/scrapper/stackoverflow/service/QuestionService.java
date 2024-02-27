@@ -2,13 +2,13 @@ package edu.java.scrapper.stackoverflow.service;
 
 import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class QuestionService {
     private final WebClient stackOverflowWebClient;
 

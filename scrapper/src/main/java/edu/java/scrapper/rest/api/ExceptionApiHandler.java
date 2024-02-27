@@ -1,7 +1,7 @@
-package edu.java.scrapper.api.rest;
+package edu.java.scrapper.rest.api;
 
-import edu.java.scrapper.api.model.ApiErrorResponse;
-import edu.java.scrapper.api.rest.exceptions.EntryAlreadyExistException;
+import edu.java.scrapper.rest.api.exceptions.EntryAlreadyExistException;
+import edu.java.scrapper.rest.model.ApiErrorResponse;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

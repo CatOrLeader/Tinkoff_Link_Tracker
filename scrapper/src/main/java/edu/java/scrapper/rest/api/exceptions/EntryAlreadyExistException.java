@@ -1,4 +1,4 @@
-package edu.java.scrapper.api.rest.exceptions;
+package edu.java.scrapper.rest.api.exceptions;
 
 public class EntryAlreadyExistException extends RuntimeException {
     public EntryAlreadyExistException(String message, Throwable cause) {

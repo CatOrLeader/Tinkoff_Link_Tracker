@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.scrapper.configuration.ClientConfiguration;
 import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,7 +51,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    void givenDataAboutQuestion_whenRequestSend_thenCorrectlyDTORetrieved() {
+    void givenDataAboutQuestion_whenRequestSend_thenCorrectDTORetrieved() {
         wireMockServer.stubFor(
             WireMock.get(
                 WireMock.urlPathMatching("/2.3/questions/.*")
@@ -60,7 +61,7 @@ public class QuestionServiceTest {
         );
 
         QuestionResponse expectedValue = new QuestionResponse(
-            "https://stackoverflow.com/questions/1495666/how-can-i-define-a-class-in-python",
+            URI.create("https://stackoverflow.com/questions/1495666/how-can-i-define-a-class-in-python"),
             "How can I define a class in Python?",
             OffsetDateTime.parse("2020-03-16T09:45:48+00:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         );

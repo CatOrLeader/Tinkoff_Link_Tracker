@@ -141,7 +141,6 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
             </plugin>
-
         </plugins>
 
         <pluginManagement>
