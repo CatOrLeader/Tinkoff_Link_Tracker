@@ -33,7 +33,13 @@ public interface LinksApi {
         @ApiResponse(responseCode = "400",
                      description = "Incorrect request parameters",
                      content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                        schema = @Schema(implementation = ApiErrorResponse.class)))})
+                                        schema = @Schema(implementation = ApiErrorResponse.class))),
+
+        @ApiResponse(responseCode = "404",
+                     description = "Chat doesn't exists",
+                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                        schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") long tgChatId);
 
@@ -46,6 +52,11 @@ public interface LinksApi {
 
         @ApiResponse(responseCode = "400",
                      description = "Incorrect request parameters",
+                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                        schema = @Schema(implementation = ApiErrorResponse.class))),
+
+        @ApiResponse(responseCode = "404",
+                     description = "Chat doesn't exists",
                      content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                         schema = @Schema(implementation = ApiErrorResponse.class))),
 
@@ -74,7 +85,7 @@ public interface LinksApi {
                                         schema = @Schema(implementation = ApiErrorResponse.class))),
 
         @ApiResponse(responseCode = "404",
-                     description = "Link not found",
+                     description = "Entry not found",
                      content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                         schema = @Schema(implementation = ApiErrorResponse.class)))
     })

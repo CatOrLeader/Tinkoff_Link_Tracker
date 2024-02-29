@@ -6,6 +6,7 @@ import edu.java.scrapper.rest.model.RemoveLinkRequest;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 @WebFluxTest(controllers = LinksController.class)
+@AutoConfigureWebTestClient
 public class LinksControllerTest {
     @Autowired
     private WebTestClient client;

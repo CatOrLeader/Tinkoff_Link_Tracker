@@ -9,9 +9,10 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import static org.springframework.web.client.HttpClientErrorException.NotFound;
 
-@RestControllerAdvice(basePackages = "edu/java/api/rest")
+@RestControllerAdvice(basePackages = "edu/java/scrapper/rest")
 public class ExceptionApiHandler {
     @ExceptionHandler(value = {
         MethodArgumentNotValidException.class, TypeMismatchException.class, BindException.class
@@ -24,7 +25,7 @@ public class ExceptionApiHandler {
     }
 
     @ExceptionHandler(value = NotFound.class)
-    public ResponseEntity<ApiErrorResponse> entryDoesntExist(NotFound exception) {
+    public ResponseEntity<ApiErrorResponse> entryDoesntExist(HttpClientErrorException exception) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return ResponseEntity
             .status(status)

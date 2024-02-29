@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class UpdatesService {
     private final WebClient botWebClient;
 
-    public Void postLinkUpdate(@NotNull LinkUpdate update) {
+    public ResponseEntity<Void> postLinkUpdate(@NotNull LinkUpdate update) {
         return botWebClient.post()
             .uri("/updates")
             .bodyValue(update)
@@ -23,7 +24,6 @@ public class UpdatesService {
                 LogManager.getLogger().error(clientResponse);
                 return Mono.error(RuntimeException::new);
             })
-            .bodyToMono(Void.class)
-            .block();
+            .toBodilessEntity().block();
     }
 }

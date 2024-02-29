@@ -31,7 +31,7 @@ public class TgChatControllerTest {
     void givenCorrectDelRequest_whenIdPresented_thenResponseStatusIsOk() {
         client.delete()
             .uri("/tg-chat/{id}", Map.of("id", 123))
-            .exchange().expectStatus().isOk();
+            .exchange().expectStatus().isOk().expectBody().isEmpty();
     }
 
     @Test
