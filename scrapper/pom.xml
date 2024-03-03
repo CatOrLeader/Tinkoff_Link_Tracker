@@ -164,16 +164,6 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
-                    <configuration>
-                        <excludes>
-                            <exclude>edu/java/scrapper/configuration/*</exclude>
-                            <exclude>edu/java/scrapper/github/model/*</exclude>
-                            <exclude>edu/java/scrapper/stackoverflow/model/*</exclude>
-                            <exclude>edu/java/scrapper/rest/model/*</exclude>
-                            <exclude>edu/java/scrapper/rest/api/exceptions/*</exclude>
-                            <exclude>edu/java/scrapper/rest/api/*Api.class</exclude>
-                        </excludes>
-                    </configuration>
                     <executions>
                         <execution>
                             <goals>
