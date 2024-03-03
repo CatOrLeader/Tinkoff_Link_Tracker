@@ -1,0 +1,9 @@
+{
+    "description": "string",
+    "code": "400",
+    "exceptionName": "string",
+    "exceptionMessage": "string",
+    "stacktrace": [
+        "string"
+    ]
+}

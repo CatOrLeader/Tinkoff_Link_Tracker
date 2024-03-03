@@ -1,6 +1,6 @@
-package edu.java.bot.api.rest;
+package edu.java.bot.rest.api;
 
-import edu.java.bot.api.model.ApiErrorResponse;
+import edu.java.bot.rest.model.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

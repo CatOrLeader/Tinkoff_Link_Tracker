@@ -1,5 +1,7 @@
 app:
   telegram-token: ${BOT_TOKEN}
+  clients:
+    scrapper-url: "http://localhost:8080"
   on-startup:
     skip-updates: true
 
@@ -9,7 +11,6 @@ spring:
   jackson:
     time-zone: UTC
 
-
 server:
   port: 8090
 
@@ -18,4 +19,4 @@ logging:
 
 springdoc:
   swagger-ui:
-    path: "swagger-ui"
+    path: "/swagger-ui"
