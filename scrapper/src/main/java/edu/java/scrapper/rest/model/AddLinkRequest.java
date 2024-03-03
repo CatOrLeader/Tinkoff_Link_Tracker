@@ -1,7 +1,7 @@
 package edu.java.scrapper.rest.model;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 
-public record AddLinkRequest(@NotEmpty URI link) {
+public record AddLinkRequest(@NotNull URI link) {
 }

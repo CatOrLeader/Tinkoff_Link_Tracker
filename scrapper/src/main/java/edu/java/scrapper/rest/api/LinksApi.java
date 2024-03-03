@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -70,7 +71,7 @@ public interface LinksApi {
                  consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<LinkResponse> addLink(
         @RequestHeader("Tg-Chat-Id") long tgChatId,
-        @RequestBody AddLinkRequest request
+        @RequestBody @Valid AddLinkRequest request
     );
 
     @ApiResponses(value = {
@@ -93,6 +94,6 @@ public interface LinksApi {
                    consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<LinkResponse> deleteLink(
         @RequestHeader("Tg-Chat-Id") long tgChatId,
-        @RequestBody RemoveLinkRequest request
+        @RequestBody @Valid RemoveLinkRequest request
     );
 }

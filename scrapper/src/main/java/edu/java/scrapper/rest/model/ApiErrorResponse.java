@@ -7,15 +7,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 
 @Data
 @AllArgsConstructor
-@Getter
-@Setter
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class ApiErrorResponse {
     private String description;

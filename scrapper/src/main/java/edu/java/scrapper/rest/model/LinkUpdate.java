@@ -6,13 +6,9 @@ import java.net.URI;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor
-@Getter
-@Setter
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public final class LinkUpdate {
     private long id;
