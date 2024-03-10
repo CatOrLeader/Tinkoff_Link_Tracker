@@ -12,12 +12,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PullResponse {
+public class IssueResponse {
     @NotNull private URI url;
     @NotNull private URI htmlUrl;
+    @NotBlank private String title;
     @NotBlank private String state;
-    @NotNull private String title;
     @NotNull private OffsetDateTime updatedAt;
     private OffsetDateTime closedAt;
-    private boolean merged;
+    private String closedBy;
 }

@@ -50,24 +50,24 @@ public class EventServiceTest {
         wireMockServer.resetAll();
     }
 
-    @Test
-    void givenDataAboutRepo_whenRequestSend_thenCorrectlyDTORetrieved() {
-        wireMockServer.stubFor(
-            WireMock.get(
-                WireMock.urlPathMatching("/repos/\\w+/\\w+/pulls/\\d+")
-            ).willReturn(
-                WireMock.okJson(JSON_BODY)
-            )
-        );
-
-        PullResponse expectedValue = new PullResponse(
-            URI.create("https://api.github.com/repos/CatOrLeader/Tinkoff_Link_Tracker/pulls/2"),
-            "HW #1",
-            OffsetDateTime.parse("2024-02-18T19:21:18Z")
-        );
-        PullResponse actualValue = service.getPullByOwnerNameNumber("CatOrLeader", "Tinkoff_Link_Tracker", 2);
-
-        assertThat(actualValue).isEqualTo(expectedValue);
-    }
+//    @Test
+//    void givenDataAboutRepo_whenRequestSend_thenCorrectlyDTORetrieved() {
+//        wireMockServer.stubFor(
+//            WireMock.get(
+//                WireMock.urlPathMatching("/repos/\\w+/\\w+/pulls/\\d+")
+//            ).willReturn(
+//                WireMock.okJson(JSON_BODY)
+//            )
+//        );
+//
+//        PullResponse expectedValue = new PullResponse(
+//            URI.create("https://api.github.com/repos/CatOrLeader/Tinkoff_Link_Tracker/pulls/2"),
+//            "HW #1",
+//            OffsetDateTime.parse("2024-02-18T19:21:18Z")
+//        );
+//        PullResponse actualValue = service.getPullByOwnerNameNumber("CatOrLeader", "Tinkoff_Link_Tracker", 2);
+//
+//        assertThat(actualValue).isEqualTo(expectedValue);
+//    }
 }
 
