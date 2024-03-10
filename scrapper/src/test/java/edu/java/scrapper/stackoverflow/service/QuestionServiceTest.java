@@ -3,7 +3,6 @@ package edu.java.scrapper.stackoverflow.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import edu.java.scrapper.configuration.ClientConfiguration;
 import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +21,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {QuestionService.class, ClientConfiguration.class})
+@SpringBootTest
 public class QuestionServiceTest {
     @RegisterExtension
     private static final WireMockExtension wireMockServer = WireMockExtension.newInstance()

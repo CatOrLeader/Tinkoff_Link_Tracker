@@ -21,6 +21,7 @@ public record ApplicationConfig(
 
     public record Clients(
         @NotBlank String githubUrl,
+        @NotBlank String githubApiToken,
         @NotBlank String stackOverflowUrl,
         @NotBlank String botUrl
     ) {

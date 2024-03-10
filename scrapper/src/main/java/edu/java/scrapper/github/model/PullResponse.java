@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RepoResponse {
+public class PullResponse {
     private URI url;
     private String title;
     private OffsetDateTime updatedAt;
