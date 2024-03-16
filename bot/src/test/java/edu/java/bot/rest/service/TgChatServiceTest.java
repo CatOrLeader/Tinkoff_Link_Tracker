@@ -4,13 +4,12 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.bot.configuration.ClientConfiguration;
+import edu.java.bot.dialog.data.BotState;
+import edu.java.bot.dialog.data.UserData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
-import edu.java.bot.dialog.data.BotState;
-import edu.java.bot.dialog.data.UserData;
-import org.jose4j.jwk.Use;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -118,7 +117,6 @@ public class TgChatServiceTest {
                 )
         );
 
-
         assertThat(service.updateChat(userData)).isNull();
     }
 
@@ -131,7 +129,6 @@ public class TgChatServiceTest {
                     WireMock.jsonResponse(API_ERROR, HttpStatus.BAD_REQUEST.value())
                 )
         );
-
 
         assertThatExceptionOfType(HttpClientErrorException.class)
             .isThrownBy(() -> service.updateChat(userData));
