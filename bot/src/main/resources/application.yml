@@ -1,5 +1,9 @@
 app:
-  telegram-token: unset
+  telegram-token: ${BOT_TOKEN}
+  clients:
+    scrapper-url: "http://localhost:8080"
+  on-startup:
+    skip-updates: true
 
 spring:
   application:
@@ -12,3 +16,7 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui"
