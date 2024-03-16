@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,9 @@ public class QuestionServiceTest {
     private QuestionService service;
 
     @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
+    static void configureProperties(@NotNull DynamicPropertyRegistry registry) {
         registry.add("app.clients.stackoverflow-url", wireMockServer::baseUrl);
+        registry.add("spring.liquibase.enabled", () -> "false");
     }
 
     @BeforeAll
