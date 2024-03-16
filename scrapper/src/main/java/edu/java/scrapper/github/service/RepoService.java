@@ -1,15 +1,15 @@
-package edu.java.github.service;
+package edu.java.scrapper.github.service;
 
-import edu.java.github.response.RepoResponse;
+import edu.java.scrapper.github.model.RepoResponse;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RepoService {
     private final WebClient githubWebClient;
 

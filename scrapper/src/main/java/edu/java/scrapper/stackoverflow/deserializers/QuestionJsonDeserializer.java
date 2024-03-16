@@ -1,11 +1,12 @@
-package edu.java.stackoverflow.deserializers;
+package edu.java.scrapper.stackoverflow.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import edu.java.stackoverflow.response.QuestionResponse;
+import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +17,7 @@ public class QuestionJsonDeserializer extends JsonDeserializer<QuestionResponse>
         throws IOException {
         TreeNode json = jsonParser.getCodec().readTree(jsonParser).get("items").get(0);
         return new QuestionResponse(
-            json.get("link").toString().replaceAll("\"", ""),
+            URI.create(json.get("link").toString().replaceAll("\"", "")),
             json.get("title").toString().replaceAll("\"", ""),
             OffsetDateTime.ofInstant(
                 Instant.ofEpochSecond(Long.parseLong(json.get("last_activity_date").toString())),

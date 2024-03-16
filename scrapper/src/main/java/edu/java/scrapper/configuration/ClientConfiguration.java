@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.scrapper.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,15 @@ public class ClientConfiguration {
     @Bean
     public WebClient stackOverflowWebClient(
         @Value("${app.clients.stackoverflow-url}") String baseUrl
+    ) {
+        return WebClient.builder()
+            .baseUrl(baseUrl)
+            .build();
+    }
+
+    @Bean
+    public WebClient botWebClient(
+        @Value("${app.clients.bot-url}") String baseUrl
     ) {
         return WebClient.builder()
             .baseUrl(baseUrl)
