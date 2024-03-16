@@ -36,7 +36,7 @@ public final class UninitializedHandler implements UpdateHandler {
     @Override
     public @NotNull BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
         return new SendMessage[] {new SendMessage(
-            userData.getUserID(),
+            userData.getUserId(),
             answersProvider.uninitialized(userData.getLocale())
         ).parseMode(ParseMode.Markdown)};
     }

@@ -183,9 +183,12 @@
                             </goals>
                             <configuration>
                                 <excludes>
+                                    <exclude>edu/java/bot/Bot**</exclude>
                                     <exclude>edu/java/bot/configuration/*</exclude>
                                     <exclude>edu/java/bot/rest/model/*</exclude>
                                     <exclude>edu/java/bot/dialog/lang/*</exclude>
+                                    <exclude>edu/java/bot/dialog/data/*</exclude>
+                                    <exclude>edu/java/not/dialog/User*</exclude>
                                     <exclude>edu/java/bot/rest/api/*Api.class</exclude>
                                 </excludes>
                             </configuration>

@@ -3,28 +3,23 @@ package edu.java.bot.dialog.handlers;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
+import edu.java.bot.rest.service.TgChatService;
 import edu.java.bot.utils.UserInfoUtils;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public final class UpdateHandlerAggregator {
     private final HandlerStorage handlerStorage;
-    private final UserDataStorage userDataStorage;
-
-    @Autowired
-    public UpdateHandlerAggregator(
-        @NotNull HandlerStorage handlerStorage,
-        @NotNull UserDataStorage userDataStorage
-    ) {
-        this.handlerStorage = handlerStorage;
-        this.userDataStorage = userDataStorage;
-    }
+    private final TgChatService tgChatService;
 
     public @NotNull Optional<BaseRequest[]> process(Update update) {
         var maybeUserId = UserInfoUtils.extractUserId(update);
@@ -33,17 +28,31 @@ public final class UpdateHandlerAggregator {
         }
         long userId = maybeUserId.get();
 
-        UserData userData;
-        var maybeUserData = userDataStorage.getUserById(userId);
-        if (maybeUserData.isPresent()) {
-            userData = maybeUserData.get();
-        } else {
-            userData = UserData.constructInitialFromId(userId);
-            userDataStorage.addUser(userData);
+        UserData userData = null;
+
+        try {
+            userData = tgChatService.getChat(userId).orElseThrow();
+        } catch (HttpClientErrorException | NoSuchElementException e) {
+            log.warn("User is not registered", e);
+        }
+
+        if (userData == null) {
+            try {
+                tgChatService.registerNewChat(userId);
+                userData = tgChatService.getChat(userId).orElseThrow();
+            } catch (HttpClientErrorException | NoSuchElementException e) {
+                log.warn("After registering user it does not exists", e);
+                return Optional.empty();
+            }
         }
 
         var response = handle(update, userData);
-        LogManager.getLogger().info(userData.getDialogState().name() + " <--- " + Arrays.toString(response));
+        try {
+            tgChatService.updateChat(userData);
+        } catch (HttpClientErrorException e) {
+            log.warn("It is impossible to change the state of the user on the server side", e);
+        }
+        log.info(userData.getDialogState().name() + " <--- " + Arrays.toString(response));
         return Optional.of(response);
     }
 

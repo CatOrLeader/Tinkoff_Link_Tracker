@@ -25,13 +25,7 @@ public interface LinkUpdatesApi {
         @ApiResponse(responseCode = "400",
                      description = "Parameters are incorrect",
                      content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(
-                         implementation = ApiErrorResponse.class))),
-
-        @ApiResponse(responseCode = "404",
-                     description = "There is no TG IDs registered",
-                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(
-                         implementation = ApiErrorResponse.class
-                     )))
+                         implementation = ApiErrorResponse.class)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)

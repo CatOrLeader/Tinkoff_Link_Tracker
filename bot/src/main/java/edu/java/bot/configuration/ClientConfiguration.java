@@ -2,8 +2,7 @@ package edu.java.bot.configuration;
 
 import edu.java.bot.rest.model.ApiErrorResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,22 +15,22 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Configuration(proxyBeanMethods = false)
+@Slf4j
 @RequiredArgsConstructor
 public class ClientConfiguration {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final ExchangeFilterFunction ERROR_RESPONSE_FILTER =
         ExchangeFilterFunction.ofResponseProcessor(ClientConfiguration::exchangeFilterResponseProcessor);
 
     private static Mono<ClientResponse> exchangeFilterResponseProcessor(ClientResponse response) {
         var statusCode = response.statusCode();
-        if (statusCode.is4xxClientError()) {
+        if (statusCode.isError()) {
             return response.bodyToMono(ApiErrorResponse.class)
                 .flatMap(body -> {
-                    LOGGER.error(body);
+                    log.error("Http Error raised from the server side: {}", body);
                     return Mono.error(
                         HttpClientErrorException.create(
                             statusCode,
-                            body.getDescription(),
+                            body.description(),
                             response.headers().asHttpHeaders(),
                             null, null
                         )

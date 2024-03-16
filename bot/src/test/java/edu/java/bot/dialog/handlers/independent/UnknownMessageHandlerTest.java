@@ -3,9 +3,8 @@ package edu.java.bot.dialog.handlers.independent;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,22 +17,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class UnknownMessageHandlerTest {
     private static final long USER_ID = 6L;
-    private static final UserData USER_DATA = UserData.constructInitialFromId(USER_ID);
+    private static final UserData USER_DATA = new UserData(
+        USER_ID,
+        BotState.UNINITIALIZED,
+        Locale.ENGLISH
+    );
     @Mock
     private static Update update;
     @Autowired
     private UpdateHandler unknownMessageHandler;
-    @Autowired
-    private UserDataStorage userDataStorage;
-
-    @BeforeEach
-    void tearUp() {
-        userDataStorage.addUser(USER_DATA);
-        userDataStorage.setUserState(USER_DATA, BotState.MAIN_MENU);
-    }
 
     @Test
     void givenCorrectUpdate_thenCorrectHandling() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         var responses = unknownMessageHandler.handle(update, USER_DATA);
 
         assertThat(responses).isNotEmpty();
@@ -41,6 +37,8 @@ public class UnknownMessageHandlerTest {
 
     @Test
     void givenCorrectUpdate_thenCorrectUserStateTransition() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
+
         BotState expectedState = USER_DATA.getDialogState();
         unknownMessageHandler.handle(update, USER_DATA);
         BotState actualState = USER_DATA.getDialogState();
@@ -50,6 +48,7 @@ public class UnknownMessageHandlerTest {
 
     @Test
     void givenCorrectUpdateWithIncorrectCommand_thenNotEmptyReturned() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         var responses = unknownMessageHandler.handle(update, USER_DATA);
 
         assertThat(responses).isNotEmpty();
@@ -57,7 +56,7 @@ public class UnknownMessageHandlerTest {
 
     @Test
     void givenCorrectUpdateWithUnregisteredUser_thenNotEmptyReturned() {
-        userDataStorage.setUserState(USER_DATA, BotState.UNINITIALIZED);
+        USER_DATA.setDialogState(BotState.UNINITIALIZED);
 
         var responses = unknownMessageHandler.handle(update, USER_DATA);
 

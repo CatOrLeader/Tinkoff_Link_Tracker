@@ -4,9 +4,6 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.request.BaseRequest;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 public final class BotResponsesUtils {
@@ -38,16 +35,6 @@ public final class BotResponsesUtils {
 
     public static int extractLinkCodeFromCallbackQuery(@NotNull CallbackQuery query) {
         return Integer.parseInt(query.data().strip().substring("cancel".length() + 1));
-    }
-
-    public static int extractBotMessageId(@NotEmpty String string) {
-        Matcher matcher = Pattern.compile("message_id=(\\d+)").matcher(string);
-        if (!matcher.find()) {
-            RuntimeException e = new RuntimeException("There is no message_id in BaseResponse");
-            LogManager.getLogger().error(e);
-            throw e;
-        }
-        return Integer.parseInt(matcher.group(1));
     }
 
     public static @NotNull String decorateLink(@NotNull String link, int maxLength) {
