@@ -1,9 +1,7 @@
-package edu.java.scrapper.stackoverflow.model;
+package edu.java.scrapper.github.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import edu.java.scrapper.stackoverflow.deserializers.QuestionJsonDeserializer;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -14,9 +12,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonDeserialize(using = QuestionJsonDeserializer.class)
-public class QuestionResponse {
+public class IssueResponse {
     @NotNull private URI url;
+    @NotNull private URI htmlUrl;
     @NotBlank private String title;
-    @NotNull private OffsetDateTime lastActivityDate;
+    @NotBlank private String state;
+    @NotNull private OffsetDateTime updatedAt;
+    private OffsetDateTime closedAt;
+    private String closedBy;
 }

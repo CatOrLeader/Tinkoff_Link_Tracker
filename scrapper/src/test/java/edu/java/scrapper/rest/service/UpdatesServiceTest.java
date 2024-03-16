@@ -3,7 +3,6 @@ package edu.java.scrapper.rest.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import edu.java.scrapper.configuration.ClientConfiguration;
 import edu.java.scrapper.rest.model.LinkUpdate;
 import java.net.URI;
 import java.util.List;
@@ -17,7 +16,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {UpdatesService.class, ClientConfiguration.class})
+@SpringBootTest
 public class UpdatesServiceTest {
     @RegisterExtension
     private static final WireMockExtension wireMockServer = WireMockExtension.newInstance()

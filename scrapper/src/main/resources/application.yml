@@ -1,6 +1,7 @@
 app:
   clients:
     github-url: "https://api.github.com"
+    github-api-token: ${GITHUB_API_TOKEN}
     stackoverflow-url: "https://api.stackexchange.com"
     bot-url: "https://localhost:8090"
   scheduler:
