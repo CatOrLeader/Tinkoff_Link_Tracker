@@ -72,6 +72,11 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
 
         <!-- Tests -->
         <dependency>
@@ -164,5 +169,39 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <excludes>
+                                    <exclude>edu/java/scrapper/configuration/*</exclude>
+                                    <exclude>edu/java/scrapper/github/model/*</exclude>
+                                    <exclude>edu/java/scrapper/stackoverflow/model/*</exclude>
+                                    <exclude>edu/java/scrapper/rest/model/*</exclude>
+                                    <exclude>edu/java/scrapper/rest/api/exceptions/*</exclude>
+                                    <exclude>edu/java/scrapper/rest/api/*Api.class</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
