@@ -8,15 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.OffsetDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@Data
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonDeserialize(using = QuestionJsonDeserializer.class)
-public class QuestionResponse {
-    @NotNull private URI url;
-    @NotBlank private String title;
-    @NotNull private OffsetDateTime lastActivityDate;
+public record QuestionResponse(@NotNull URI url,
+                               @NotBlank String title,
+                               @NotNull OffsetDateTime lastActivityDate) {
 }

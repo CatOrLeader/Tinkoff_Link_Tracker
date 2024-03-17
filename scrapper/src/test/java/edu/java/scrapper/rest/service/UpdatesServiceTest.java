@@ -3,7 +3,8 @@ package edu.java.scrapper.rest.service;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import edu.java.scrapper.rest.model.LinkUpdate;
+import edu.java.scrapper.rest.model.GetChatResponse;
+import edu.java.scrapper.rest.model.LinkUpdateRequest;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -45,11 +46,11 @@ public class UpdatesServiceTest {
                 WireMock.ok()
             )
         );
-        LinkUpdate update = new LinkUpdate(
+        LinkUpdateRequest update = new LinkUpdateRequest(
             0L,
             URI.create("https://github.com"),
             "dont know",
-            List.of(0L)
+            List.of(new GetChatResponse(1L, "MAIN_MENU", "EN"))
         );
 
         var response = service.postLinkUpdate(update);

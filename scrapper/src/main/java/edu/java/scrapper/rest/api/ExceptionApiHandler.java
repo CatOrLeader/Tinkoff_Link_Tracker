@@ -1,6 +1,5 @@
 package edu.java.scrapper.rest.api;
 
-import edu.java.scrapper.rest.api.exceptions.EntryAlreadyExistException;
 import edu.java.scrapper.rest.model.ApiErrorResponse;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ public class ExceptionApiHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity
             .status(status)
-            .body(new ApiErrorResponse(exception, status));
+            .body(new ApiErrorResponse(status, exception));
     }
 
     @ExceptionHandler(value = NotFound.class)
@@ -29,14 +28,14 @@ public class ExceptionApiHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return ResponseEntity
             .status(status)
-            .body(new ApiErrorResponse(exception, status));
+            .body(new ApiErrorResponse(status, exception));
     }
 
-    @ExceptionHandler(value = EntryAlreadyExistException.class)
-    public ResponseEntity<ApiErrorResponse> entryAlreadyExist(EntryAlreadyExistException exception) {
+    @ExceptionHandler(value = HttpClientErrorException.Conflict.class)
+    public ResponseEntity<ApiErrorResponse> entryAlreadyExist(HttpClientErrorException exception) {
         HttpStatus status = HttpStatus.CONFLICT;
         return ResponseEntity
             .status(status)
-            .body(new ApiErrorResponse(exception, status));
+            .body(new ApiErrorResponse(status, exception));
     }
 }

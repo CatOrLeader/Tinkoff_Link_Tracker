@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RepoResponse {
+public final class RepoResponse {
     @NotBlank private String type;
     private Actor actor;
     private Payload payload;

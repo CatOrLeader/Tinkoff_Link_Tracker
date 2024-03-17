@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 public class ClientConfiguration {
     private static final ExchangeFilterFunction ERROR_RESPONSE_FILTER =
         ExchangeFilterFunction.ofResponseProcessor(ClientConfiguration::exchangeFilterResponseProcessor);
-    private final ApplicationConfig config;
 
     private static Mono<ClientResponse> exchangeFilterResponseProcessor(ClientResponse response) {
         var statusCode = response.statusCode();
@@ -30,7 +29,7 @@ public class ClientConfiguration {
                     return Mono.error(
                         HttpClientErrorException.create(
                             statusCode,
-                            body.getDescription(),
+                            body.description(),
                             response.headers().asHttpHeaders(),
                             null, null
                         )
@@ -47,7 +46,7 @@ public class ClientConfiguration {
         return WebClient.builder()
             .baseUrl(baseUrl)
             .defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", config.clients().githubApiToken()))
+            .defaultHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", baseUrl))
             .defaultHeader("X-GitHub-Api-Version", "2022-11-28")
             .build();
     }
