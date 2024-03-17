@@ -37,7 +37,7 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
                 IssueResponse response = githubEventService.getIssueByOwnerNameNumber(
                     link.getCreatedBy(),
                     link.getUpdatedBy(),
-                    Integer.parseInt(link.getUri().toString().split("/")[5])
+                    Integer.parseInt(link.getUri().toString().split("/")[(int) offset])
                 );
 
                 linkService.update(
