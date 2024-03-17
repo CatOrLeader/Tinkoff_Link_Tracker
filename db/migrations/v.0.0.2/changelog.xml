@@ -11,4 +11,5 @@
     <include file="17-03-2024-link-add-last-update-column.sql" relativeToChangelogFile="true"/>
     <include file="17-03-2024-chat-add-user-state-column.sql" relativeToChangelogFile="true"/>
     <include file="17-03-2024-chat-add-lang-tag-column.sql" relativeToChangelogFile="true"/>
+    <include file="17-03-2024-link-add-type-column.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
