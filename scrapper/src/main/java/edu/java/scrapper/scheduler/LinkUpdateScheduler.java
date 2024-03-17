@@ -29,8 +29,9 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
         fixedRateString = "#{@scheduler.forceCheckDelay().toMillis()}"
     )
     public void update() {
+        final long offset = 5L;
         List<Link> links = new ArrayList<>(linkService.findAll());
-        OffsetDateTime now = OffsetDateTime.now().minusMinutes(5);
+        OffsetDateTime now = OffsetDateTime.now().minusMinutes(offset);
         for (var link : links) {
             if (link.getLastCheckedAt().isBefore(now)) {
                 IssueResponse response = githubEventService.getIssueByOwnerNameNumber(

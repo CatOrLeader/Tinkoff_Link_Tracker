@@ -1,9 +1,9 @@
 package edu.java.scrapper.domain.service;
 
 import edu.java.scrapper.domain.dto.Link;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Collection;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 @Service
