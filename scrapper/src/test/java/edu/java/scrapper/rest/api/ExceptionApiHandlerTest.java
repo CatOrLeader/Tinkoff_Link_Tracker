@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = ExceptionApiHandler.class)
@@ -27,8 +27,8 @@ public class ExceptionApiHandlerTest {
 
     @Test
     void givenRequest_whenEntryDoesntExist_then404() {
-        HttpClientErrorException exception =
-            HttpClientErrorException.create(HttpStatus.NOT_FOUND, "entry already exist", null, null, null);
+        WebClientResponseException exception =
+            WebClientResponseException.create(HttpStatus.NOT_FOUND.value(), "entry already exist", null, null, null);
 
         var expectedResponse =
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse(HttpStatus.NOT_FOUND, exception));
@@ -39,14 +39,10 @@ public class ExceptionApiHandlerTest {
 
     @Test
     void givenRequest_whenEntryAlreadyExists_then409() {
-        HttpClientErrorException exception =
-            HttpClientErrorException.Conflict.create(
-                "entry already exists",
-                HttpStatus.CONFLICT,
-                HttpStatus.CONFLICT.getReasonPhrase(),
-                null,
-                null,
-                null
+        WebClientResponseException exception =
+            WebClientResponseException.create(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(), null, null, null
             );
 
         var expectedResponse =

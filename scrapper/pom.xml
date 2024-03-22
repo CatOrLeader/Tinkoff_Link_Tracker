@@ -196,6 +196,7 @@
                                     <exclude>edu/java/scrapper/rest/model/*</exclude>
                                     <exclude>edu/java/scrapper/rest/api/exceptions/*</exclude>
                                     <exclude>edu/java/scrapper/rest/api/*Api.class</exclude>
+                                    <exclude>edu/java/scrapper/domain/dto/*</exclude>
                                 </excludes>
                             </configuration>
                         </execution>

@@ -7,18 +7,5 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include
-        file="v.0.0.1/changelog.xml"
-        relativeToChangelogFile="true"
-    />
-
-    <include
-        file="v.0.0.2/changelog.xml"
-        relativeToChangelogFile="true"
-    />
-
-    <include
-        file="v.0.0.3/changelog.xml"
-        relativeToChangelogFile="true"
-    />
+    <include file="18-03-2024-link-updated-at-column-rename.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

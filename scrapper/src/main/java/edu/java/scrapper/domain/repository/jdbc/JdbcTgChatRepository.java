@@ -3,7 +3,8 @@ package edu.java.scrapper.domain.repository.jdbc;
 import edu.java.scrapper.domain.dto.TgChat;
 import edu.java.scrapper.domain.repository.TgChatRepository;
 import edu.java.scrapper.domain.repository.jdbc.mappers.TgChatRowMapper;
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -18,7 +19,7 @@ public class JdbcTgChatRepository implements TgChatRepository {
     private final TgChatRowMapper tgChatRowMapper;
 
     @Override
-    public boolean register(long tgChatId) {
+    public boolean register(String tgChatId) {
         return Boolean.TRUE.equals(transactionTemplate.execute(status -> {
             var maybeTgChat = find(tgChatId);
             if (maybeTgChat.isPresent()) {
@@ -32,56 +33,60 @@ public class JdbcTgChatRepository implements TgChatRepository {
     }
 
     @Override
-    public Optional<TgChat> find(long tgChatId) {
+    public Optional<TgChat> find(String tgChatId) {
         return transactionTemplate.execute(status ->
             jdbcClient.sql("SELECT * FROM tg_chat WHERE id = ?")
-                .param(String.valueOf(tgChatId))
+                .param(tgChatId)
                 .query(tgChatRowMapper)
                 .optional()
         );
     }
 
     @Override
-    public boolean update(TgChat chat) {
-        return Boolean.TRUE.equals(transactionTemplate.execute(status -> {
-            var maybeTgChat = find(chat.getId());
-            if (maybeTgChat.isEmpty()) {
-                return false;
-            }
-
-            return jdbcClient.sql(
-                    "UPDATE tg_chat SET dialog_state = :dialogState, language_tag = :languageTag WHERE id = :id")
-                       .param("dialogState", chat.getDialogState())
-                       .param("languageTag", chat.getLanguageTag())
-                       .param("id", String.valueOf(chat.getId()))
-                       .update() > 0;
-        }));
+    public Collection<TgChat> findAll() {
+        return transactionTemplate.execute(status ->
+            jdbcClient.sql("SELECT * FROM tg_chat").query(tgChatRowMapper).list()
+        );
     }
 
     @Override
-    public List<TgChat> findAll() {
-        return transactionTemplate.execute(status -> jdbcClient.sql("SELECT * FROM tg_chat")
-            .query(tgChatRowMapper).list());
+    public Collection<TgChat> findAllByLinkUrl(String linkUrl) {
+        return transactionTemplate.execute(status ->
+            jdbcClient.sql("SELECT * FROM tg_chat, chat_link_assignment, link "
+                           + "WHERE tg_chat.id = chat_link_assignment.chat_id AND "
+                           + "chat_link_assignment.link_id = link.id AND link.uri = ?")
+                .param(linkUrl)
+                .query(tgChatRowMapper)
+                .list()
+        );
     }
 
     @Override
-    public boolean remove(long tgChatId) {
+    public boolean update(@NotBlank String tgChatId, @NotBlank String dialogState, @NotBlank String languageTag) {
         return Boolean.TRUE.equals(transactionTemplate.execute(status -> {
             var maybeTgChat = find(tgChatId);
             if (maybeTgChat.isEmpty()) {
                 return false;
             }
 
-            String strTgChatId = String.valueOf(tgChatId);
+            return jdbcClient.sql(
+                    "UPDATE tg_chat SET dialog_state = ?, language_tag = ? WHERE id = ?")
+                       .params(dialogState, languageTag, tgChatId)
+                       .update() > 0;
+        }));
+    }
 
-            boolean isDeleted = jdbcClient.sql("DELETE FROM tg_chat WHERE id = ?").param(strTgChatId).update() > 0;
-            if (!isDeleted) {
+    @Override
+    public boolean remove(String tgChatId) {
+        return Boolean.TRUE.equals(transactionTemplate.execute(status -> {
+            var maybeTgChat = find(tgChatId);
+            if (maybeTgChat.isEmpty()) {
                 return false;
             }
 
-            jdbcClient.sql("DELETE FROM chat_link_assignment WHERE chat_id = ?").param(strTgChatId).update();
+            jdbcClient.sql("DELETE FROM chat_link_assignment WHERE chat_id = ?").param(tgChatId).update();
 
-            return true;
+            return jdbcClient.sql("DELETE FROM tg_chat WHERE id = ?").param(tgChatId).update() > 0;
         }));
     }
 }

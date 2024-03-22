@@ -1,7 +1,20 @@
 package edu.java.scrapper.domain.service;
 
-public interface TgChatService {
-    void register(long tgChatId);
+import edu.java.scrapper.domain.dto.TgChat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Optional;
 
-    void unregister(long tgChatId);
+public interface TgChatService {
+    boolean register(long tgChatId);
+
+    boolean unregister(long tgChatId);
+
+    boolean update(@NotNull TgChat chat);
+
+    @NotNull Optional<TgChat> find(long tgChatId);
+
+    @NotNull Collection<TgChat> findAllByLinkUrl(@NotBlank URI linkUrl);
 }

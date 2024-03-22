@@ -1,7 +1,6 @@
 package edu.java.scrapper.domain.repository.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
-import java.sql.SQLException;
 import edu.java.scrapper.domain.dto.TgChat;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,8 +23,9 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Rollback(false)
     @Order(1)
     void givenEmptyDB_whenFetchAnything_thenNothingFetched() {
-        assertThat(tgChatRepository.find(1L)).isEmpty();
+        assertThat(tgChatRepository.find("1")).isEmpty();
         assertThat(tgChatRepository.findAll()).isEmpty();
+        assertThat(tgChatRepository.findAllByLinkUrl("https://github.com")).isEmpty();
     }
 
     @Test
@@ -34,7 +33,11 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Rollback(false)
     @Order(2)
     void givenEmptyDB_whenAddChat_thenChatIsAdded() {
-        assertThat(tgChatRepository.register(1L)).isTrue();
+        assertThat(tgChatRepository.register("1")).isTrue();
+
+        var chat = tgChatRepository.find("1");
+        assertThat(chat).isPresent().contains(chat.get());
+        assertThat(tgChatRepository.findAll()).containsExactly(chat.get());
     }
 
     @Test
@@ -42,7 +45,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Rollback(false)
     @Order(3)
     void givenDB_whenAddDuplicateChat_thenChatIsNotAdded() {
-        assertThat(tgChatRepository.register(1L)).isFalse();
+        assertThat(tgChatRepository.register("1")).isFalse();
     }
 
     @Test
@@ -51,9 +54,10 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Order(4)
     void whenUpdateExistingChat_thenUpdatedCorrectly() {
         TgChat chat = new TgChat(1L, "MAIN_MENU", "EN");
-        boolean isUpdated = tgChatRepository.update(chat);
+        boolean isUpdated =
+            tgChatRepository.update(String.valueOf(chat.getId()), chat.getDialogState(), chat.getLanguageTag());
 
-        assertThat(tgChatRepository.find(1L)).contains(chat);
+        assertThat(tgChatRepository.find("1")).contains(chat);
         assertThat(isUpdated).isTrue();
     }
 
@@ -64,17 +68,21 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     void whenUpdateNonExistingChat_thenFalse() {
         TgChat chat = new TgChat(2L, "MAIN_MENU", "EN");
 
-        assertThat(tgChatRepository.update(chat)).isFalse();
+        assertThat(tgChatRepository.update(
+            String.valueOf(chat.getId()),
+            chat.getDialogState(),
+            chat.getLanguageTag()
+        )).isFalse();
     }
 
     @Test
     @Transactional
     @Rollback(false)
     @Order(6)
-    void whenRemoveExistingChat_thenFalse() {
+    void whenRemoveExistingChat_thenTrue() {
         TgChat chat = new TgChat(1L, "MAIN_MENU", "EN");
 
-        assertThat(tgChatRepository.remove(chat.getId())).isTrue();
+        assertThat(tgChatRepository.remove(String.valueOf(chat.getId()))).isTrue();
     }
 
     @Test
@@ -84,6 +92,6 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     void whenRemoveNonExistingChat_thenFalse() {
         TgChat chat = new TgChat(1L, "MAIN_MENU", "EN");
 
-        assertThat(tgChatRepository.remove(chat.getId())).isFalse();
+        assertThat(tgChatRepository.remove(String.valueOf(chat.getId()))).isFalse();
     }
 }

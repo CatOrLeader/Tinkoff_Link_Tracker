@@ -2,11 +2,12 @@ package edu.java.scrapper.configuration;
 
 import edu.java.scrapper.rest.model.ApiErrorResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -14,9 +15,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Configuration(proxyBeanMethods = false)
-@Slf4j
+@Log4j2
 @RequiredArgsConstructor
 public class ClientConfiguration {
+    private final ApplicationConfig config;
+
     private static final ExchangeFilterFunction ERROR_RESPONSE_FILTER =
         ExchangeFilterFunction.ofResponseProcessor(ClientConfiguration::exchangeFilterResponseProcessor);
 
@@ -45,8 +48,8 @@ public class ClientConfiguration {
     ) {
         return WebClient.builder()
             .baseUrl(baseUrl)
-            .defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
-            .defaultHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", baseUrl))
+            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", config.clients().githubApiToken()))
             .defaultHeader("X-GitHub-Api-Version", "2022-11-28")
             .build();
     }

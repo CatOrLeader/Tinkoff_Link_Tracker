@@ -77,34 +77,34 @@
 //        spec.expectStatus().isBadRequest();
 //    }
 //
-//    @Test
-//    void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIsOk() {
-//        URI url = URI.create("https://github.com");
-//
-//        ResponseSpec spec = client.method(HttpMethod.DELETE)
-//            .uri("/links")
-//            .header("Tg-Chat-Id", "123")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .body(BodyInserters.fromValue(new RemoveLinkRequest(url)))
-//            .exchange();
-//
-//        spec.expectStatus().isOk();
-//    }
-//
-//    @Test
-//    void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseBodyIsCorrect() {
-//        URI url = URI.create("https://github.com");
-//        LinkResponse response = new LinkResponse(0, url);
-//
-//        ResponseSpec spec = client.method(HttpMethod.DELETE)
-//            .uri("/links")
-//            .header("Tg-Chat-Id", "123")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .body(BodyInserters.fromValue(new RemoveLinkRequest(url)))
-//            .exchange();
-//
-//        spec.expectBody(LinkResponse.class).isEqualTo(response);
-//    }
+////    @Test
+////    void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIsOk() {
+////        URI url = URI.create("https://github.com");
+////
+////        ResponseSpec spec = client.method(HttpMethod.DELETE)
+////            .uri("/links")
+////            .header("Tg-Chat-Id", "123")
+////            .contentType(MediaType.APPLICATION_JSON)
+////            .body(BodyInserters.fromValue(new RemoveLinkRequest(url)))
+////            .exchange();
+////
+////        spec.expectStatus().isOk();
+////    }
+////
+////    @Test
+////    void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseBodyIsCorrect() {
+////        URI url = URI.create("https://github.com");
+////        LinkResponse response = new LinkResponse(0, url);
+////
+////        ResponseSpec spec = client.method(HttpMethod.DELETE)
+////            .uri("/links")
+////            .header("Tg-Chat-Id", "123")
+////            .contentType(MediaType.APPLICATION_JSON)
+////            .body(BodyInserters.fromValue(new RemoveLinkRequest(url)))
+////            .exchange();
+////
+////        spec.expectBody(LinkResponse.class).isEqualTo(response);
+////    }
 //
 //    @Test
 //    void givenCorrectDelRequest_whenTgChatIdHeaderIsPresented_thenResponseStatusIs400() {
@@ -113,7 +113,7 @@
 //        ResponseSpec spec = client.method(HttpMethod.DELETE)
 //            .uri("/links")
 //            .contentType(MediaType.APPLICATION_JSON)
-//            .body(BodyInserters.fromValue(new RemoveLinkRequest(url)))
+//            .body(BodyInserters.fromValue(new RemoveLinkRequest(1)))
 //            .exchange();
 //
 //        spec.expectStatus().isBadRequest();

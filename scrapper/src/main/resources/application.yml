@@ -6,8 +6,8 @@ app:
     bot-url: "https://localhost:8090"
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 10s
+    interval: 90s
+    force-check-delay: 90s
 
 spring:
   application:
