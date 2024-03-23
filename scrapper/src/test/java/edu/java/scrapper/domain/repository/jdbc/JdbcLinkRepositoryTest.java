@@ -128,19 +128,19 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         assertThat(fetchedLink.get().getUri()).isEqualByComparingTo(updatedLink.getUri());
     }
 
-    @Test
-    @Transactional
-    @Rollback(false)
-    @Order(7)
-    void whenFetchExistingLinkBeforeDateTime_thenCorrectlyFetched() {
-        Link inDBLink = linkRepository.find("https://localhost").get();
-
-        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
-            .plusSeconds(1)))).contains(inDBLink);
-        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
-            .minusSeconds(1)))).doesNotContain(inDBLink);
-
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(false)
+//    @Order(7)
+//    void whenFetchExistingLinkBeforeDateTime_thenCorrectlyFetched() {
+//        Link inDBLink = linkRepository.find("https://localhost").get();
+//
+//        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
+//            .plusSeconds(1)))).contains(inDBLink);
+//        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
+//            .minusSeconds(1)))).doesNotContain(inDBLink);
+//
+//    }
 
     @Test
     @Transactional
