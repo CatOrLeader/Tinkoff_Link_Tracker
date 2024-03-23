@@ -21,7 +21,7 @@ public class QuestionService {
                 .queryParam("filter", "!6VClQr9fY7evMd5wsutFmZL5T")
                 .build())
             .retrieve().bodyToMono(QuestionResponse.class)
-            .doOnError(throwable -> log.error("Something went wrong durin parsing from SOF", throwable))
+            .doOnError(throwable -> log.error("Something went wrong during parsing from SOF", throwable))
             .block();
     }
 }
