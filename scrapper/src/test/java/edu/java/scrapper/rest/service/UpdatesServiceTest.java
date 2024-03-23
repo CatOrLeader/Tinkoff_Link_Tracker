@@ -29,6 +29,7 @@ public class UpdatesServiceTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("app.clients.bot-url", wireMockServer::baseUrl);
+        registry.add("app.scheduler.enable", () -> "false");
         registry.add("spring.liquibase.enabled", () -> "false");
     }
 
