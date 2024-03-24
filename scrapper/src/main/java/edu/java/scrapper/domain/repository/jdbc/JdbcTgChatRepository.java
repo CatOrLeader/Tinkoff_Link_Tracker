@@ -5,6 +5,7 @@ import edu.java.scrapper.domain.repository.TgChatRepository;
 import edu.java.scrapper.domain.repository.jdbc.mappers.TgChatRowMapper;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -24,8 +25,9 @@ public class JdbcTgChatRepository implements TgChatRepository {
                 return false;
             }
 
-            return jdbcClient.sql("INSERT INTO tg_chat VALUES (?, DEFAULT, NULL)")
+            return jdbcClient.sql("INSERT INTO tg_chat VALUES (?, DEFAULT, ?)")
                        .param(tgChatId)
+                       .param(Locale.ENGLISH.toLanguageTag())
                        .update() > 0;
         }));
     }

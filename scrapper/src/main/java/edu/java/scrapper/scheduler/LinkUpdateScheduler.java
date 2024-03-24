@@ -44,10 +44,13 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
     public void update() {
         OffsetDateTime toCheck = Instant.now().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)).minus(scheduler.interval());
         linkService.findAllBefore(toCheck).forEach(
-            link -> fetchLinkFromExternalSource(link).filter(this::updateLinkAndLastCheckedTime).ifPresentOrElse(
-                this::postToUsers,
-                () -> updateLinkAndLastCheckedTime(link)
-            )
+            link -> fetchLinkFromExternalSource(link)
+                .filter(this::updateLinkAndLastCheckedTime)
+                .filter(link1 -> isUpdatedFromSource(link, link1))
+                .ifPresentOrElse(
+                    (this::postToUsers),
+                    () -> updateLinkAndLastCheckedTime(link)
+                )
         );
     }
 
@@ -111,6 +114,10 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
         updatesService.postLinkUpdate(
             new LinkUpdateRequest(link, tgChatService.findAllByLinkUrl(link.getUri()))
         );
+    }
+
+    private boolean isUpdatedFromSource(Link previousLink, Link link) {
+        return !previousLink.getUpdatedAt().isEqual(link.getUpdatedAt());
     }
 }
 

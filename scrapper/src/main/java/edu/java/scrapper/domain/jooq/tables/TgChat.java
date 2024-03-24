@@ -67,7 +67,7 @@ public class TgChat extends TableImpl<TgChatRecord> {
      * The column <code>TG_CHAT.DIALOG_STATE</code>.
      */
     public final TableField<TgChatRecord, String> DIALOG_STATE = createField(DSL.name("DIALOG_STATE"),
-        SQLDataType.VARCHAR(16).nullable(false)
+        SQLDataType.VARCHAR(32).nullable(false)
             .defaultValue(DSL.field(DSL.raw("'UNINITIALIZED'"), SQLDataType.VARCHAR)),
         this,
         ""

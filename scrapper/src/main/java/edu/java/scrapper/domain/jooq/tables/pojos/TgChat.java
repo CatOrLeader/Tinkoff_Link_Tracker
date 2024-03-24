@@ -70,7 +70,7 @@ public class TgChat implements Serializable {
     /**
      * Getter for <code>TG_CHAT.DIALOG_STATE</code>.
      */
-    @Size(max = 16)
+    @Size(max = 32)
     @Nullable
     public String getDialogState() {
         return this.dialogState;

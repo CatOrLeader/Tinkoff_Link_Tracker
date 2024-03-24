@@ -58,7 +58,7 @@ public class TgChatRecord extends UpdatableRecordImpl<TgChatRecord> implements R
     /**
      * Getter for <code>TG_CHAT.DIALOG_STATE</code>.
      */
-    @Size(max = 16)
+    @Size(max = 32)
     @Nullable
     public String getDialogState() {
         return (String) get(1);

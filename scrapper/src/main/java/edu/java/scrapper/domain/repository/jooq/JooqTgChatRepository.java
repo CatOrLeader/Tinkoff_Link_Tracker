@@ -4,11 +4,11 @@ import edu.java.scrapper.domain.dto.TgChat;
 import edu.java.scrapper.domain.jooq.Tables;
 import edu.java.scrapper.domain.repository.TgChatRepository;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.defaultValue;
 
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class JooqTgChatRepository implements TgChatRepository {
                    .values(
                        tgChatId,
                        defaultValue(Tables.TG_CHAT.DIALOG_STATE),
-                       DSL.nullCondition()
+                       Locale.ENGLISH.toLanguageTag()
                    ).execute() > 0;
     }
 

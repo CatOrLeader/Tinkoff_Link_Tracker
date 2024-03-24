@@ -1,5 +1,6 @@
 package edu.java.scrapper.domain.dto;
 
+import edu.java.scrapper.domain.repository.jpa.dto.EntityLink;
 import edu.java.scrapper.github.model.IssueResponse;
 import edu.java.scrapper.github.model.PullResponse;
 import edu.java.scrapper.stackoverflow.model.QuestionResponse;
@@ -21,6 +22,7 @@ import static edu.java.scrapper.utils.DateTimeUtils.OFFSET_HOURS;
 @EqualsAndHashCode(of = {"id", "uri"})
 public class Link {
     private static final int MAX_STRING_SIZE = 128;
+
     private long id;
     private @NotNull URI uri;
     private String description;
@@ -67,6 +69,13 @@ public class Link {
             link.getCreatedBy(), link.getUpdatedBy(), link.getTitle(), link.getEtag(),
             link.getLastCheckedAt() != null ? link.getLastCheckedAt().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)) : null,
             link.getType() != null ? ResponseType.valueOf(link.getType()) : null
+        );
+    }
+
+    public Link(@NotNull EntityLink link) {
+        this(link.getId(), link.getUri(), link.getDescription(),
+            link.getCreatedAt(), link.getUpdatedAt(), link.getCreatedBy(), link.getUpdatedBy(), link.getTitle(),
+            link.getEtag(), link.getLastCheckedAt(), link.getType()
         );
     }
 }
