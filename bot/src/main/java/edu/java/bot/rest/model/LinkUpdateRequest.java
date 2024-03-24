@@ -8,15 +8,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@Data
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-public final class LinkUpdateRequest {
-    @Min(0) private int id;
-    @NotNull private URI url;
-    @NotBlank private String description;
-    @NotEmpty private List<Integer> tgChatIds;
+public record LinkUpdateRequest(@Min(0) long id, @NotNull URI url, @NotBlank String description,
+                                @NotEmpty List<GetChatResponse> tgChatIds) {
 }

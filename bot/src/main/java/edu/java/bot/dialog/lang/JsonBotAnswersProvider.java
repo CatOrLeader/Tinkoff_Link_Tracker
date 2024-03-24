@@ -157,4 +157,9 @@ public final class JsonBotAnswersProvider implements BotAnswersProvider {
     public String trackedResources(@NotNull Locale locale) {
         return runtimeAnswersMap.get(locale).get("state_tracked_res");
     }
+
+    @Override
+    public String msgNotification(@NotNull Locale locale) {
+        return runtimeAnswersMap.get(locale).get("msg_notification");
+    }
 }
