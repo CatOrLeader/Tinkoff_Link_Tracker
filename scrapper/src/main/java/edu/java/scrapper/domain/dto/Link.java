@@ -6,11 +6,13 @@ import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import static edu.java.scrapper.utils.DateTimeUtils.OFFSET_HOURS;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -56,5 +58,15 @@ public class Link {
         this.title = response.title().substring(0, Math.min(response.title().length(), MAX_STRING_SIZE));
         this.updatedAt = response.lastActivityDate();
         this.type = QuestionResponse.TYPE;
+    }
+
+    public Link(@NotNull edu.java.scrapper.domain.jooq.tables.pojos.Link link) {
+        this(link.getId(), URI.create(link.getUri()), link.getDescription(),
+            link.getCreatedAt() != null ? link.getCreatedAt().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)) : null,
+            link.getUpdatedAt() != null ? link.getUpdatedAt().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)) : null,
+            link.getCreatedBy(), link.getUpdatedBy(), link.getTitle(), link.getEtag(),
+            link.getLastCheckedAt() != null ? link.getLastCheckedAt().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)) : null,
+            link.getType() != null ? ResponseType.valueOf(link.getType()) : null
+        );
     }
 }

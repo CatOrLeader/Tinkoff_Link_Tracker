@@ -8,10 +8,8 @@ import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionTemplate;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcTgChatRepository implements TgChatRepository {
     private final JdbcClient jdbcClient;

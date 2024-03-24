@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
 
@@ -15,8 +16,14 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     @Bean
-    Clients clients
+    Clients clients,
+    @Name("database-access-type")
+    DatabaseAccessType databaseAccessType
 ) {
+    public enum DatabaseAccessType {
+        JDBC, JPA, JOOQ
+    }
+
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 

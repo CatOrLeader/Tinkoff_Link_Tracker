@@ -22,4 +22,8 @@ public class TgChat {
     public TgChat(@NotNull UpdateChatRequest request) {
         this(request.userId(), request.botState(), request.locale());
     }
+
+    public TgChat(@NotNull edu.java.scrapper.domain.jooq.tables.pojos.TgChat tgChat) {
+        this(Long.parseLong(tgChat.getId()), tgChat.getDialogState(), tgChat.getLanguageTag());
+    }
 }

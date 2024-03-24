@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset catorleader:12 dbms:postgresql
+-- changeset catorleader:12
 ALTER TABLE link
 ALTER last_checked_at
 DROP NOT NULL;

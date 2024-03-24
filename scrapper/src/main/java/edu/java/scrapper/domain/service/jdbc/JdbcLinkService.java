@@ -9,9 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
     private final LinkRepository linkRepository;

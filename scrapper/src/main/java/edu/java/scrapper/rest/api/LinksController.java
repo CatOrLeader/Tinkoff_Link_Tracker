@@ -32,7 +32,7 @@ public class LinksController implements LinksApi {
     private final QuestionService questionService;
 
     public ResponseEntity<ListLinksResponse> getLinks(long tgChatId) {
-        checkIfTgChatExists(tgChatId);
+        tgChatExistsOrThrows(tgChatId);
 
         return ResponseEntity.ok(new ListLinksResponse(
             linkService.findAllByTgId(tgChatId).stream()
@@ -45,7 +45,7 @@ public class LinksController implements LinksApi {
         long tgChatId,
         AddLinkRequest request
     ) {
-        checkIfTgChatExists(tgChatId);
+        tgChatExistsOrThrows(tgChatId);
 
         URI receivedLinkUri = request.link();
         var fetchedFromSourceLink = fetchLink(receivedLinkUri);
@@ -65,7 +65,7 @@ public class LinksController implements LinksApi {
         long tgChatId,
         RemoveLinkRequest request
     ) {
-        checkIfTgChatExists(tgChatId);
+        tgChatExistsOrThrows(tgChatId);
 
         var link =
             linkService.remove(tgChatId, request.linkId()).orElseThrow(() -> WebClientResponseException.NotFound.create(
@@ -75,7 +75,7 @@ public class LinksController implements LinksApi {
         return ResponseEntity.ok(new LinkResponse(link.getId(), link.getUri()));
     }
 
-    private void checkIfTgChatExists(long tgChatId) throws HttpClientErrorException {
+    private void tgChatExistsOrThrows(long tgChatId) throws HttpClientErrorException {
         tgChatService.find(tgChatId).orElseThrow(() -> WebClientResponseException.NotFound.create(
             HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase() + ": tg-chat", null, null, null
         ));
