@@ -8,6 +8,7 @@ import edu.java.scrapper.github.service.EventService;
 import edu.java.scrapper.rest.model.LinkUpdateRequest;
 import edu.java.scrapper.rest.service.UpdatesService;
 import edu.java.scrapper.stackoverflow.service.QuestionService;
+import edu.java.scrapper.utils.DateTimeUtils;
 import edu.java.scrapper.utils.LinkUtils;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -29,8 +30,6 @@ import static edu.java.scrapper.utils.DateTimeUtils.OFFSET_HOURS;
 @Log4j2
 @RequiredArgsConstructor
 public final class LinkUpdateScheduler implements UpdateScheduler {
-    private static final int OFFSET = 3;
-
     private final ApplicationConfig.Scheduler scheduler;
     private final LinkService linkService;
     private final TgChatService tgChatService;
@@ -43,7 +42,7 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
         fixedRateString = "#{@scheduler.forceCheckDelay().toMillis()}"
     )
     public void update() {
-        OffsetDateTime toCheck = Instant.now().atOffset(ZoneOffset.ofHours(OFFSET)).minus(scheduler.interval());
+        OffsetDateTime toCheck = Instant.now().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)).minus(scheduler.interval());
         linkService.findAllBefore(toCheck).forEach(
             link -> fetchLinkFromExternalSource(link).filter(this::updateLinkAndLastCheckedTime).ifPresentOrElse(
                 this::postToUsers,
@@ -104,7 +103,7 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
     }
 
     private boolean updateLinkAndLastCheckedTime(Link link) {
-        link.setLastCheckedAt(LocalDateTime.now().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)));
+        link.setLastCheckedAt(LocalDateTime.now().atOffset(ZoneOffset.ofHours(DateTimeUtils.OFFSET_HOURS)));
         return linkService.update(link);
     }
 
