@@ -6,32 +6,20 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
 import edu.java.bot.dialog.lang.Keyboard;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MenuHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
     private final Keyboard keyboard;
-    private final UserDataStorage userDataStorage;
-
-    @Autowired
-    public MenuHandler(
-        @NotNull BotAnswersProvider answersProvider,
-        @NotNull Keyboard keyboard,
-        @NotNull UserDataStorage userDataStorage
-    ) {
-        this.answersProvider = answersProvider;
-        this.keyboard = keyboard;
-        this.userDataStorage = userDataStorage;
-    }
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {
@@ -49,14 +37,14 @@ public class MenuHandler implements UpdateHandler {
     public BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
         var userLocale = userData.getLocale();
         return new SendMessage[] {new SendMessage(
-            userData.getUserID(),
+            userData.getUserId(),
             answersProvider.mainMenu(userLocale)
         ).replyMarkup(keyboard.mainMenu(userLocale)).parseMode(ParseMode.Markdown)};
     }
 
     @Override
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
-        userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        userData.setDialogState(BotState.MAIN_MENU);
     }
 
     private boolean isInappropriateRequest(Update update, UserData userData) {

@@ -2,12 +2,12 @@ package edu.java.scrapper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import liquibase.Contexts;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -24,8 +24,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-abstract class IntegrationTest {
-    static final PostgreSQLContainer<?> POSTGRES;
+public abstract class IntegrationTest {
+    public static final PostgreSQLContainer<?> POSTGRES;
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
@@ -49,7 +49,7 @@ abstract class IntegrationTest {
                 database
             );
 
-            liquibase.update(new Contexts(), new OutputStreamWriter(System.out));
+            liquibase.update(new Contexts(), new LabelExpression());
         } catch (SQLException | LiquibaseException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }

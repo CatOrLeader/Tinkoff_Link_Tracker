@@ -2,22 +2,22 @@ package edu.java.scrapper.github.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import edu.java.scrapper.domain.dto.ResponseType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.OffsetDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@Data
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PullResponse {
-    @NotNull private URI url;
-    @NotNull private URI htmlUrl;
-    @NotBlank private String state;
-    @NotNull private String title;
-    @NotNull private OffsetDateTime updatedAt;
-    private OffsetDateTime closedAt;
-    private boolean merged;
+public record PullResponse(@NotNull URI url,
+                           String body,
+                           @NotNull URI htmlUrl,
+                           @NotBlank String state,
+                           @NotNull String title,
+                           @NotNull OffsetDateTime createdAt,
+                           @NotNull OffsetDateTime updatedAt,
+                           OffsetDateTime closedAt,
+                           @NotNull User user,
+                           boolean merged) {
+    public static final ResponseType TYPE = ResponseType.GITHUB_PULL;
 }

@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset catorleader:1 dbms:postgresql
+--changeset catorleader:1
 CREATE TABLE IF NOT EXISTS tg_chat(
     id VARCHAR(20) PRIMARY KEY NOT NULL
 );

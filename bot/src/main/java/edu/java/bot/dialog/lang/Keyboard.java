@@ -7,8 +7,8 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import edu.java.bot.dialog.data.Link;
 import edu.java.bot.utils.BotResponsesUtils;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,17 +37,19 @@ public final class Keyboard {
         ).resizeKeyboard(true);
     }
 
-    public @NotNull InlineKeyboardMarkup userLinks(@NotNull Set<Link> links) {
+    public @NotNull InlineKeyboardMarkup userLinks(@NotNull List<Link> links) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
         for (Link link : links) {
+            String uriStr = String.valueOf(link.getUrl());
+
             markup.addRow(
-                new InlineKeyboardButton(BotResponsesUtils.decorateLink(link.url(), MAX_LINK_LENGTH))
+                new InlineKeyboardButton(BotResponsesUtils.decorateLink(uriStr, MAX_LINK_LENGTH))
                     .callbackData(String.format(
                         CALLBACK_INFO,
-                        link.hashCode()
+                        link.getId()
                     ))
-                    .url(link.url())
+                    .url(uriStr)
             );
         }
 
@@ -56,20 +58,23 @@ public final class Keyboard {
 
     public @NotNull InlineKeyboardMarkup userLinksWithRemoveButton(
         @NotNull Locale userLocale,
-        @NotNull Set<Link> links
+        @NotNull List<Link> links
     ) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
         for (Link link : links) {
+            String uriStr = String.valueOf(link.getUrl());
+            long id = link.getId();
+
             markup.addRow(
-                new InlineKeyboardButton(BotResponsesUtils.decorateLink(link.url(), MAX_LINK_LENGTH))
+                new InlineKeyboardButton(BotResponsesUtils.decorateLink(uriStr, MAX_LINK_LENGTH))
                     .callbackData(String.format(
                         CALLBACK_INFO,
-                        link.hashCode()
+                        id
                     ))
-                    .url(link.url()),
+                    .url(uriStr),
                 new InlineKeyboardButton(answersProvider.removeBtn(userLocale))
-                    .callbackData(String.format(CALLBACK_REMOVE, link.hashCode()))
+                    .callbackData(String.format(CALLBACK_REMOVE, id))
             );
         }
 

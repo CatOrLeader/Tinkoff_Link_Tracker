@@ -27,7 +27,7 @@ public interface LinksApi {
     @Operation(summary = "Get user links by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
-                     description = "Link successfully retrieved",
+                     description = "Links successfully retrieved",
                      content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                         schema = @Schema(implementation = ListLinksResponse.class))),
 

@@ -21,7 +21,7 @@ public class ApiErrorResponseTest {
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).collect(
                 Collectors.toList())
         );
-        ApiErrorResponse actualValue = new ApiErrorResponse(exception, status);
+        ApiErrorResponse actualValue = new ApiErrorResponse(status, exception);
 
         assertThat(actualValue).isEqualTo(expectedValue);
     }

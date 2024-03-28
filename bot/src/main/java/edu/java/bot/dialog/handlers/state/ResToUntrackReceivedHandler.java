@@ -6,37 +6,26 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
-import edu.java.bot.dialog.data.UserLinksTracker;
 import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
+import edu.java.bot.rest.service.LinksService;
 import edu.java.bot.utils.BotResponsesUtils;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Locale;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public final class ResToUntrackReceivedHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
     private final UpdateHandler menuHandler;
-    private final UserDataStorage userDataStorage;
-    private final UserLinksTracker linksTracker;
-
-    @Autowired
-    public ResToUntrackReceivedHandler(
-        @NotNull BotAnswersProvider answersProvider,
-        @NotNull UpdateHandler menuHandler,
-        @NotNull UserDataStorage userDataStorage,
-        @NotNull UserLinksTracker linksTracker
-    ) {
-        this.answersProvider = answersProvider;
-        this.menuHandler = menuHandler;
-        this.userDataStorage = userDataStorage;
-        this.linksTracker = linksTracker;
-    }
+    private final LinksService linksService;
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {
@@ -55,10 +44,14 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
         }
 
         var callbackQuery = update.callbackQuery();
-        var userId = userData.getUserID();
+        var userId = userData.getUserId();
 
-        int linkUrlStr = BotResponsesUtils.extractLinkCodeFromCallbackQuery(callbackQuery);
-        linksTracker.removeUserLinkByCode(userId, linkUrlStr);
+        try {
+            linksService.deleteLink(userId, BotResponsesUtils.extractLinkCodeFromCallbackQuery(callbackQuery));
+        } catch (HttpClientErrorException e) {
+            log.error("Link cannot be removed due to the server exception", e);
+            return Optional.empty();
+        }
 
         var response = constructTemplateResponse(update, userData);
         setStateToLogicallyNext(response, userData);
@@ -69,7 +62,7 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
     @Override
     public @NotNull BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
         var innerResponse = new SendMessage[] {new SendMessage(
-            userData.getUserID(),
+            userData.getUserId(),
             answersProvider.resUnregisterSuccess(userData.getLocale())
         ).parseMode(ParseMode.Markdown)};
         var outerResponse = menuHandler.constructTemplateResponse(update, userData);
@@ -79,7 +72,7 @@ public final class ResToUntrackReceivedHandler implements UpdateHandler {
 
     @Override
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
-        userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        userData.setDialogState(BotState.MAIN_MENU);
     }
 
     private Optional<UpdateHandler> getAppropriateHandler(String query, UserData userData) {

@@ -20,5 +20,6 @@
     "state_tracked_res": "Tracked resources",
     "transition_list": "Opening your links... \uD83D\uDD0E",
     "transition_track_waiting": "You are trying to subscribe to a new resource.",
-    "state_list": "There are your links \uD83D\uDCDC"
+    "state_list": "There are your links \uD83D\uDCDC",
+    "msg_notification": "\uD83C\uDD95 There are the next updates that are appearing for now:\n\n"
 }
