@@ -58,13 +58,18 @@ public class JpaTgChatRepository implements TgChatRepository {
     @Override
     @Transactional
     public boolean remove(String tgChatId) {
-        var tgChat = tgChatRepository.findById(tgChatId);
+        var maybeTgChat = tgChatRepository.findById(tgChatId);
 
-        if (tgChat.isEmpty()) {
+        if (maybeTgChat.isEmpty()) {
             return false;
         }
 
-        tgChat.get().getLinks().clear();
+        var tgChat = maybeTgChat.get();
+
+        tgChat.getLinks()
+            .forEach(link -> link.getTgChats().removeIf(tgChat1 -> tgChat1.getId().equals(tgChatId)));
+        tgChat.getLinks().clear();
+
         tgChatRepository.flush();
 
         return tgChatRepository.remove(tgChatId) > 0;

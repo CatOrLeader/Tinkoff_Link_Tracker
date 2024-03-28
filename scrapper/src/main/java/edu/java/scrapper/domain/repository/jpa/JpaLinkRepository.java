@@ -83,7 +83,20 @@ public class JpaLinkRepository implements LinkRepository {
     @Transactional
     public Optional<Link> remove(String tgChatId, long linkId) {
         return linkRepository.findById(linkId).filter(
-            link -> link.getTgChats().removeIf(tgChat -> tgChat.getId().equals(tgChatId))
+            link -> {
+                link.getTgChats().removeIf(tgChat -> {
+                    if (tgChat.getId().equals(tgChatId)) {
+                        tgChat.getLinks().removeIf(link1 -> link1.getId() == linkId);
+                        return true;
+                    }
+                    return false;
+                });
+                linkRepository.saveAndFlush(link);
+                if (link.getTgChats().isEmpty()) {
+                    linkRepository.delete(link);
+                }
+                return true;
+            }
         ).map(Link::new);
     }
 
