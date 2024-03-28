@@ -5,11 +5,12 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.Link;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
-import edu.java.bot.dialog.data.UserLinksTracker;
 import edu.java.bot.dialog.handlers.UpdateHandler;
-import java.time.Instant;
-import org.junit.jupiter.api.BeforeEach;
+import edu.java.bot.rest.service.LinksService;
+import java.net.URI;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -20,36 +21,37 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @SpringBootTest(properties = "app.on-startup.skip-updates=false")
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UntrackHandlerTest {
     private static final long USER_ID = 7L;
     private static final String CORRECT_COMMAND = "/untrack";
+    private static final UserData USER_DATA = new UserData(
+        USER_ID,
+        BotState.UNINITIALIZED,
+        Locale.ENGLISH
+    );
+    private static final Link LINK = new Link(URI.create("https://github.com"));
     @Mock
     private static Update update;
     @Mock
     private static Message message;
-    private static final UserData USER_DATA = UserData.constructInitialFromId(USER_ID);
     @Autowired
     private UpdateHandler untrackHandler;
     @Autowired
-    private UserDataStorage userDataStorage;
-    @Autowired
-    private UserLinksTracker linksTracker;
-
-    @BeforeEach
-    void tearUp() {
-        userDataStorage.addUser(USER_DATA);
-        userDataStorage.setUserState(USER_DATA, BotState.MAIN_MENU);
-    }
+    private LinksService linksService;
 
     @Test
     void givenCorrectUpdate_thenCorrectHandling() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
+        Mockito.when(linksService.getLinks(USER_ID)).thenReturn(Optional.of(List.of(LINK)));
 
         var responses = untrackHandler.handle(update, USER_DATA);
 
@@ -59,8 +61,10 @@ public class UntrackHandlerTest {
     @Test
     @Order(1)
     void givenCorrectUpdate_whenNoUserLinks_thenCorrectUserStateTransition() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
+        Mockito.when(linksService.getLinks(USER_ID)).thenReturn(Optional.empty());
         untrackHandler.handle(update, USER_DATA);
 
         BotState expectedState = BotState.MAIN_MENU;
@@ -72,9 +76,10 @@ public class UntrackHandlerTest {
     @Test
     @Order(2)
     void givenCorrectUpdate_whenUserHasLinks_thenCorrectUserStateTransition() {
-        linksTracker.addUserLink(USER_ID, new Link("any", Instant.now()));
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
+        Mockito.when(linksService.getLinks(USER_ID)).thenReturn(Optional.of(List.of(LINK)));
         untrackHandler.handle(update, USER_DATA);
 
         BotState expectedState = BotState.RES_UNTRACK_WAITING;
@@ -85,6 +90,7 @@ public class UntrackHandlerTest {
 
     @Test
     void givenCorrectUpdateWithIncorrectCommand_thenEmptyReturned() {
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn("bla");
 
@@ -95,9 +101,9 @@ public class UntrackHandlerTest {
 
     @Test
     void givenCorrectUpdateWithUnregisteredUser_thenEmptyResponse() {
+        USER_DATA.setDialogState(BotState.UNINITIALIZED);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
-        userDataStorage.setUserState(USER_DATA, BotState.UNINITIALIZED);
 
         var responses = untrackHandler.handle(update, USER_DATA);
 

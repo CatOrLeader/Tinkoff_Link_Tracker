@@ -4,9 +4,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,21 +20,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MainMenuHandlerTest {
     private static final long USER_ID = 8L;
     private static final String QUERY = "any";
-    private static final UserData USER_DATA = UserData.constructInitialFromId(USER_ID);
+    private static final UserData USER_DATA = new UserData(
+        USER_ID,
+        BotState.MAIN_MENU,
+        Locale.ENGLISH
+    );
     @Mock
     private static Update update;
     @Mock
     private static Message message;
     @Autowired
     private UpdateHandler mainMenuHandler;
-    @Autowired
-    private UserDataStorage userDataStorage;
-
-    @BeforeEach
-    void tearUp() {
-        userDataStorage.addUser(USER_DATA);
-        userDataStorage.setUserState(USER_DATA, BotState.MAIN_MENU);
-    }
 
     @Test
     void givenCorrectUpdate_thenCorrectHandling() {
@@ -59,9 +54,9 @@ public class MainMenuHandlerTest {
 
     @Test
     void givenCorrectUpdateWithUnregisteredUser_thenNotEmptyReturned() {
+        USER_DATA.setDialogState(BotState.UNINITIALIZED);
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(QUERY);
-        userDataStorage.setUserState(USER_DATA, BotState.UNINITIALIZED);
 
         var responses = mainMenuHandler.handle(update, USER_DATA);
 

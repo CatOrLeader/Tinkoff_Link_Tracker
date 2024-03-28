@@ -7,28 +7,18 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public final class HelpHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
-    private final UserDataStorage userDataStorage;
-
-    @Autowired
-    public HelpHandler(
-        @NotNull BotAnswersProvider answersProvider,
-        @NotNull UserDataStorage userDataStorage
-    ) {
-        this.answersProvider = answersProvider;
-        this.userDataStorage = userDataStorage;
-    }
 
     @Override public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {
         if (isInappropriateRequest(update.message(), userData)) {
@@ -45,7 +35,7 @@ public final class HelpHandler implements UpdateHandler {
     public BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
         return new SendMessage[] {
             new SendMessage(
-                userData.getUserID(),
+                userData.getUserId(),
                 answersProvider.commands(userData.getLocale())
             ).parseMode(ParseMode.Markdown)
         };
@@ -53,7 +43,7 @@ public final class HelpHandler implements UpdateHandler {
 
     @Override
     public void setStateToLogicallyNext(@NotNull BaseRequest[] responses, @NotNull UserData userData) {
-        userDataStorage.setUserState(userData, BotState.MAIN_MENU);
+        userData.setDialogState(BotState.MAIN_MENU);
     }
 
     private boolean isInappropriateRequest(Message message, UserData userData) {

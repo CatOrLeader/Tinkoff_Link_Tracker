@@ -1,18 +1,19 @@
 package edu.java.bot.rest.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.bot.configuration.ClientConfiguration;
-import edu.java.bot.rest.model.AddLinkRequest;
+import edu.java.bot.dialog.data.Link;
 import edu.java.bot.rest.model.ApiErrorResponse;
 import edu.java.bot.rest.model.LinkResponse;
 import edu.java.bot.rest.model.ListLinksResponse;
-import edu.java.bot.rest.model.RemoveLinkRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.client.HttpClientErrorException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -88,10 +88,12 @@ public class LinksServiceTest {
                 )
         );
 
-        ListLinksResponse expectedResponse = GET_LINKS_RESPONSE;
-        ListLinksResponse actualResponse = service.getLinks(1L).block();
+        var expectedResponse = GET_LINKS_RESPONSE.links().stream()
+            .map(Link::new)
+            .collect(Collectors.toList());
+        var actualResponse = service.getLinks(1L);
 
-        assertThat(actualResponse).isEqualTo(expectedResponse);
+        assertThat(actualResponse).contains(expectedResponse);
     }
 
     @Test
@@ -105,13 +107,13 @@ public class LinksServiceTest {
         );
 
         HttpClientErrorException expectedException = HttpClientErrorException.create(
-            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.getCode())),
-            API_ERROR_RESPONSE.getDescription(),
+            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.code())),
+            API_ERROR_RESPONSE.description(),
             null, null, null
         );
 
         assertThatExceptionOfType(expectedException.getClass())
-            .isThrownBy(() -> service.getLinks(1L).block());
+            .isThrownBy(() -> service.getLinks(1L));
     }
 
     @Test
@@ -124,10 +126,10 @@ public class LinksServiceTest {
                     WireMock.okJson(POST_LINKS)
                 )
         );
-        AddLinkRequest request = new AddLinkRequest(URI.create("https://github.com"));
+        Link link = new Link(URI.create("https://github.com"));
 
-        LinkResponse expectedResponse = POST_LINKS_RESPONSE;
-        LinkResponse actualResponse = service.postLink(1L, request).block();
+        var expectedResponse = new Link(POST_LINKS_RESPONSE);
+        var actualResponse = service.postLink(1L, link);
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
     }
@@ -142,16 +144,16 @@ public class LinksServiceTest {
                     WireMock.jsonResponse(API_ERROR_RESPONSE, HttpStatus.BAD_REQUEST.value())
                 )
         );
-        AddLinkRequest request = new AddLinkRequest(URI.create("https://github.com"));
+        Link link = new Link(URI.create("https://github.com"));
 
         HttpClientErrorException expectedException = HttpClientErrorException.create(
-            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.getCode())),
-            API_ERROR_RESPONSE.getDescription(),
+            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.code())),
+            API_ERROR_RESPONSE.description(),
             null, null, null
         );
 
         assertThatExceptionOfType(expectedException.getClass())
-            .isThrownBy(() -> service.postLink(1L, request).block());
+            .isThrownBy(() -> service.postLink(1L, link));
     }
 
     @Test
@@ -164,10 +166,10 @@ public class LinksServiceTest {
                     WireMock.okJson(DELETE_LINKS)
                 )
         );
-        RemoveLinkRequest request = new RemoveLinkRequest(URI.create("https://github.com"));
+        Link link = new Link(URI.create("https://github.com"));
 
-        LinkResponse expectedResponse = DELETE_LINKS_RESPONSE;
-        LinkResponse actualResponse = service.deleteLink(1L, request).block();
+        var expectedResponse = new Link(DELETE_LINKS_RESPONSE);
+        var actualResponse = service.deleteLink(1L, link.getId());
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
     }
@@ -182,15 +184,15 @@ public class LinksServiceTest {
                     WireMock.jsonResponse(API_ERROR_RESPONSE, HttpStatus.BAD_REQUEST.value())
                 )
         );
-        RemoveLinkRequest request = new RemoveLinkRequest(URI.create("https://github.com"));
+        Link link = new Link(URI.create("https://github.com"));
 
         HttpClientErrorException expectedException = HttpClientErrorException.create(
-            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.getCode())),
-            API_ERROR_RESPONSE.getDescription(),
+            HttpStatusCode.valueOf(Integer.parseInt(API_ERROR_RESPONSE.code())),
+            API_ERROR_RESPONSE.description(),
             null, null, null
         );
 
         assertThatExceptionOfType(expectedException.getClass())
-            .isThrownBy(() -> service.deleteLink(1L, request).block());
+            .isThrownBy(() -> service.deleteLink(1L, link.getId()));
     }
 }

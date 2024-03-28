@@ -7,22 +7,16 @@ import edu.java.bot.dialog.handlers.UpdateHandlerAggregator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserUpdatesListener implements UpdatesListener {
     private final UpdateHandlerAggregator aggregator;
-    private TelegramBot bot;
+    private final TelegramBot bot;
     private Set<Integer> updatesIdsToSkip;
-
-    @Autowired
-    public UserUpdatesListener(
-        @NotNull UpdateHandlerAggregator aggregator
-    ) {
-        this.aggregator = aggregator;
-    }
 
     @Override
     public int process(List<Update> updates) {
@@ -39,10 +33,6 @@ public class UserUpdatesListener implements UpdatesListener {
 
     public void receiveUpdatesToSkip(@NotNull Set<Integer> updatesIdsToSkip) {
         this.updatesIdsToSkip = updatesIdsToSkip;
-    }
-
-    public void receiveBot(@NotNull TelegramBot bot) {
-        this.bot = bot;
     }
 
     private boolean hasToIgnore(Update update) {
