@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset catorleader:14 dbms:postgresql
+-- changeset catorleader:14
 ALTER TABLE link
 ALTER updated_at
 TYPE TIMESTAMP WITHOUT TIME ZONE;

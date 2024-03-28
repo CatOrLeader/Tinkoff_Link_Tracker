@@ -5,11 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public interface LinkRepository {
-    @NotNull List<Link> findAll();
+    @NotNull Collection<Link> findAll();
 
     @NotNull Collection<Link> findAllByTgChatId(@NotBlank String tgChatId);
 

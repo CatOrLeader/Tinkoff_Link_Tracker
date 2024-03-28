@@ -8,6 +8,7 @@ app:
     enable: true
     interval: 90s
     force-check-delay: 90s
+  database-access-type: JOOQ
 
 spring:
   application:
@@ -19,7 +20,6 @@ spring:
     driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: false
-
 
 springdoc:
   swagger-ui:

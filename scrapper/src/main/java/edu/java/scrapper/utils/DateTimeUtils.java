@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 public final class DateTimeUtils {
-    private static final int OFFSET_HOURS = 3;
+    public static final int OFFSET_HOURS = 3;
 
     private DateTimeUtils() {
     }

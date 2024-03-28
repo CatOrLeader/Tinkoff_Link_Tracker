@@ -5,6 +5,7 @@ import edu.java.scrapper.domain.dto.Link;
 import edu.java.scrapper.domain.dto.ResponseType;
 import edu.java.scrapper.domain.repository.LinkRepository;
 import edu.java.scrapper.domain.repository.TgChatRepository;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -17,22 +18,30 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JdbcLinkRepositoryTest extends IntegrationTest {
+public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository linkRepository;
     @Autowired
     private TgChatRepository tgChatRepository;
+
+    @DynamicPropertySource
+    static void properties(@NotNull DynamicPropertyRegistry registry) {
+        registry.add("app.database-access-type", () -> "JDBC");
+    }
 
     @Test
     @Transactional
     @Rollback(false)
     @Order(1)
     void givenEmptyDB_whenTryingToFetchAny_thenNothing() {
+
         assertThat(linkRepository.find("https://localhost")).isEmpty();
         assertThat(linkRepository.findById(1)).isEmpty();
         assertThat(linkRepository.findAll()).isEmpty();
@@ -128,19 +137,18 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         assertThat(fetchedLink.get().getUri()).isEqualByComparingTo(updatedLink.getUri());
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback(false)
-//    @Order(7)
-//    void whenFetchExistingLinkBeforeDateTime_thenCorrectlyFetched() {
-//        Link inDBLink = linkRepository.find("https://localhost").get();
-//
-//        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
-//            .plusSeconds(1)))).contains(inDBLink);
-//        assertThat(linkRepository.findAllBefore(Timestamp.from(Instant.from(inDBLink.getLastCheckedAt())
-//            .minusSeconds(1)))).doesNotContain(inDBLink);
-//
-//    }
+    @Test
+    @Transactional
+    @Rollback(false)
+    @Order(7)
+    void whenUpdateEtag_thenCorrectlyUpdated() {
+        Link inDBLink = linkRepository.find("https://localhost").get();
+
+        boolean isUpdated = linkRepository.updateEtag(inDBLink.getUri().toString(), "ETAG");
+
+        assertThat(isUpdated).isTrue();
+        assertThat(linkRepository.findById(inDBLink.getId()).get().getEtag()).isEqualTo("ETAG");
+    }
 
     @Test
     @Transactional

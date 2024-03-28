@@ -7,14 +7,11 @@ import edu.java.scrapper.utils.DateTimeUtils;
 import jakarta.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionTemplate;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcLinkRepository implements LinkRepository {
     private final TransactionTemplate transactionTemplate;
@@ -78,13 +75,13 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public List<Link> findAll() {
+    public Collection<Link> findAll() {
         return transactionTemplate.execute(status -> jdbcClient.sql("SELECT * FROM link")
             .query(linkRowMapper).list());
     }
 
     @Override
-    public List<Link> findAllByTgChatId(String tgChatId) {
+    public Collection<Link> findAllByTgChatId(String tgChatId) {
         return transactionTemplate.execute(status ->
             jdbcClient.sql("SELECT * FROM link, chat_link_assignment "
                            + "WHERE link.id = chat_link_assignment.link_id AND chat_id = ?")
@@ -132,8 +129,7 @@ public class JdbcLinkRepository implements LinkRepository {
             return maybeLink.filter(value ->
                 jdbcClient.sql("UPDATE link SET uri = :uri, description = :description, created_at = :createdAt, "
                                + "updated_at = :updatedAt, created_by = :createdBy, updated_by = :updatedBy, "
-                               + "title = :title, etag = :etag, "
-                               + "last_checked_at = :lastCheckedAt, type = :type WHERE id = :id")
+                               + "title = :title, last_checked_at = :lastCheckedAt, type = :type WHERE id = :id")
                     .param("uri", link.getUri().toString())
                     .param("description", link.getDescription())
                     .param("createdAt", DateTimeUtils.parseFrom(link.getCreatedAt()))
@@ -141,7 +137,6 @@ public class JdbcLinkRepository implements LinkRepository {
                     .param("createdBy", link.getCreatedBy())
                     .param("updatedBy", link.getUpdatedBy())
                     .param("title", link.getTitle())
-                    .param("etag", link.getEtag())
                     .param("lastCheckedAt", DateTimeUtils.parseFrom(link.getLastCheckedAt()))
                     .param("type", link.getType().name())
                     .param("id", value.getId())

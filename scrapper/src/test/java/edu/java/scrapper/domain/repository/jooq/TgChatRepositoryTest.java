@@ -1,7 +1,9 @@
-package edu.java.scrapper.domain.repository.jdbc;
+package edu.java.scrapper.domain.repository.jooq;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.dto.TgChat;
+import edu.java.scrapper.domain.repository.TgChatRepository;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -9,14 +11,21 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JdbcTgChatRepositoryTest extends IntegrationTest {
+public class TgChatRepositoryTest extends IntegrationTest {
     @Autowired
-    private JdbcTgChatRepository tgChatRepository;
+    private TgChatRepository tgChatRepository;
+
+    @DynamicPropertySource
+    static void properties(@NotNull DynamicPropertyRegistry registry) {
+        registry.add("app.database-access-type", () -> "JOOQ");
+    }
 
     @Test
     @Transactional

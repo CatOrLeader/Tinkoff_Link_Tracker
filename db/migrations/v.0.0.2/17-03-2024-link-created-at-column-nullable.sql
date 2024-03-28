@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset catorleader:10 dbms:postgresql
+-- changeset catorleader:10
 ALTER TABLE link
 ALTER created_at
 DROP NOT NULL;
