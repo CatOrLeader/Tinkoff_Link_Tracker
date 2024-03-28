@@ -1,12 +1,36 @@
 app:
+  clients:
+    github-url: "https://api.github.com"
+    github-api-token: ${GITHUB_API_TOKEN}
+    stackoverflow-url: "https://api.stackexchange.com"
+    bot-url: "http://localhost:8090"
   scheduler:
-    enable: true
-    interval: 10s
-    force-check-delay: 10s
+    enable: false
+    interval: 30s
+    force-check-delay: 30s
+  database-access-type: JPA
 
 spring:
   application:
     name: scrapper
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/${POSTGRES_DB}"
+    username: "${POSTGRES_USER}"
+    password: "${POSTGRES_PASSWORD}"
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: false
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      ddl-auto: validate
+    show-sql: true
+
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui"
 
 server:
   port: 8080

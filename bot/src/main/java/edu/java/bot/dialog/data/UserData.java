@@ -1,25 +1,27 @@
 package edu.java.bot.dialog.data;
 
+import edu.java.bot.rest.model.GetChatResponse;
 import java.util.Locale;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
+@Setter
 @Getter
-@Setter(AccessLevel.PACKAGE)
+@EqualsAndHashCode
 public final class UserData {
-    private final long userID;
+    private final long userId;
     private @NotNull BotState dialogState;
     private @NotNull Locale locale;
 
-    public static @NotNull UserData constructInitialFromId(long userId) {
-        return new UserData(
-            userId,
-            BotState.UNINITIALIZED,
-            Locale.ENGLISH
+    public UserData(@NotNull GetChatResponse response) {
+        this(
+            response.userId(),
+            BotState.valueOf(response.dialogState()),
+            Locale.forLanguageTag(response.languageTag())
         );
     }
 

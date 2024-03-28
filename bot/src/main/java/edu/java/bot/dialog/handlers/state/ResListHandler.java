@@ -8,24 +8,16 @@ import edu.java.bot.dialog.lang.BotAnswersProvider;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Locale;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public final class ResListHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
     private final UpdateHandler menuHandler;
     private final UpdateHandler unknownMessageHandler;
-
-    public ResListHandler(
-        @NotNull BotAnswersProvider answersProvider,
-        @NotNull UpdateHandler menuHandler,
-        @NotNull UpdateHandler unknownMessageHandler
-    ) {
-        this.answersProvider = answersProvider;
-        this.menuHandler = menuHandler;
-        this.unknownMessageHandler = unknownMessageHandler;
-    }
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {

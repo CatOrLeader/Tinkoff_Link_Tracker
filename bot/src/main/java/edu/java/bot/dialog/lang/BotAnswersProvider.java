@@ -47,4 +47,6 @@ public sealed interface BotAnswersProvider permits JsonBotAnswersProvider {
     String noResYet(@NotNull Locale locale);
 
     String trackedResources(@NotNull Locale locale);
+
+    String msgNotification(@NotNull Locale locale);
 }

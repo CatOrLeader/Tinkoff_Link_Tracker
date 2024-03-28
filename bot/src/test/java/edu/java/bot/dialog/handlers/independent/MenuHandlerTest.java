@@ -4,9 +4,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.dialog.data.BotState;
 import edu.java.bot.dialog.data.UserData;
-import edu.java.bot.dialog.data.UserDataStorage;
 import edu.java.bot.dialog.handlers.UpdateHandler;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,26 +20,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MenuHandlerTest {
     private static final long USER_ID = 3L;
     private static final String CORRECT_COMMAND = "/menu";
+    private static final UserData USER_DATA = new UserData(
+        USER_ID,
+        BotState.UNINITIALIZED,
+        Locale.ENGLISH
+    );
     @Mock
     private static Update update;
     @Mock
     private static Message message;
-    private static final UserData USER_DATA = UserData.constructInitialFromId(USER_ID);
     @Autowired
     private UpdateHandler menuHandler;
-    @Autowired
-    private UserDataStorage userDataStorage;
-
-    @BeforeEach
-    void tearUp() {
-        userDataStorage.addUser(USER_DATA);
-        userDataStorage.setUserState(USER_DATA, BotState.MAIN_MENU);
-    }
 
     @Test
     void givenCorrectUpdate_thenCorrectHandling() {
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
 
         var responses = menuHandler.handle(update, USER_DATA);
 
@@ -52,6 +48,7 @@ public class MenuHandlerTest {
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
         menuHandler.handle(update, USER_DATA);
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
 
         BotState expectedState = BotState.MAIN_MENU;
         BotState actualState = USER_DATA.getDialogState();
@@ -63,6 +60,7 @@ public class MenuHandlerTest {
     void givenCorrectUpdateWithIncorrectCommand_thenEmptyReturned() {
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn("bla");
+        USER_DATA.setDialogState(BotState.MAIN_MENU);
 
         var responses = menuHandler.handle(update, USER_DATA);
 
@@ -73,7 +71,7 @@ public class MenuHandlerTest {
     void givenCorrectUpdateWithUnregisteredUser_thenEmptyReturned() {
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(message.text()).thenReturn(CORRECT_COMMAND);
-        userDataStorage.setUserState(USER_DATA, BotState.UNINITIALIZED);
+        USER_DATA.setDialogState(BotState.UNINITIALIZED);
 
         var responses = menuHandler.handle(update, USER_DATA);
 

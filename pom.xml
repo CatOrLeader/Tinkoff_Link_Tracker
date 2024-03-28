@@ -60,6 +60,7 @@
     <modules>
         <module>bot</module>
         <module>scrapper</module>
+        <module>scrapper-jooq</module>
     </modules>
 
 
@@ -111,8 +112,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
         </dependencies>
     </dependencyManagement>
 
@@ -161,8 +160,6 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
             </plugin>
-
-
         </plugins>
 
 

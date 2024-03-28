@@ -8,18 +8,14 @@ import edu.java.bot.dialog.data.UserData;
 import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public final class UnknownMessageHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
-
-    @Autowired
-    public UnknownMessageHandler(@NotNull BotAnswersProvider answersProvider) {
-        this.answersProvider = answersProvider;
-    }
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {
@@ -29,7 +25,7 @@ public final class UnknownMessageHandler implements UpdateHandler {
     @Override
     public @NotNull BaseRequest[] constructTemplateResponse(@NotNull Update update, @NotNull UserData userData) {
         return new SendMessage[] {new SendMessage(
-            userData.getUserID(),
+            userData.getUserId(),
             answersProvider.incorrectMessage(userData.getLocale())
         ).parseMode(ParseMode.Markdown)};
     }

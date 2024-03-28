@@ -4,39 +4,22 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import edu.java.bot.dialog.data.UserData;
 import edu.java.bot.dialog.handlers.UpdateHandler;
-import edu.java.bot.dialog.handlers.independent.ListHandler;
-import edu.java.bot.dialog.handlers.independent.TrackHandler;
-import edu.java.bot.dialog.handlers.independent.UntrackHandler;
 import edu.java.bot.dialog.lang.BotAnswersProvider;
 import edu.java.bot.utils.MessagesApprovalUtils;
 import java.util.Locale;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MainMenuHandler implements UpdateHandler {
     private final BotAnswersProvider answersProvider;
     private final UpdateHandler trackHandler;
     private final UpdateHandler untrackHandler;
     private final UpdateHandler listHandler;
     private final UpdateHandler unknownMessageHandler;
-
-    @Autowired
-    public MainMenuHandler(
-        @NotNull BotAnswersProvider answersProvider,
-        @NotNull TrackHandler trackHandler,
-        @NotNull UntrackHandler untrackHandler,
-        @NotNull ListHandler listHandler,
-        @NotNull UpdateHandler unknownMessageHandler
-    ) {
-        this.answersProvider = answersProvider;
-        this.trackHandler = trackHandler;
-        this.untrackHandler = untrackHandler;
-        this.listHandler = listHandler;
-        this.unknownMessageHandler = unknownMessageHandler;
-    }
 
     @Override
     public Optional<BaseRequest[]> handle(@NotNull Update update, @NotNull UserData userData) {

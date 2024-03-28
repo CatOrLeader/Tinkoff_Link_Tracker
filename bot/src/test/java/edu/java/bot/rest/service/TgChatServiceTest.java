@@ -4,9 +4,12 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import edu.java.bot.configuration.ClientConfiguration;
+import edu.java.bot.dialog.data.BotState;
+import edu.java.bot.dialog.data.UserData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,7 @@ public class TgChatServiceTest {
         .options(WireMockConfiguration.options().dynamicPort())
         .build();
     private static String API_ERROR;
+    private static String GET_CHAT_ANSWER;
     @Autowired
     private TgChatService service;
 
@@ -39,8 +43,10 @@ public class TgChatServiceTest {
     static void tearUp() throws IOException {
         Path resourceFolder = Path.of("src", "test", "resources", "edu", "java", "bot", "rest", "service");
         Path apiErrorJson = Path.of(resourceFolder.toAbsolutePath().toString(), "api_error.json");
+        Path getChatAnswerJson = Path.of(resourceFolder.toAbsolutePath().toString(), "get_chat.json");
 
         API_ERROR = Files.readString(apiErrorJson);
+        GET_CHAT_ANSWER = Files.readString(getChatAnswerJson);
     }
 
     @AfterEach
@@ -57,7 +63,7 @@ public class TgChatServiceTest {
                 )
         );
 
-        assertThat(service.registerNewChat(1L).block()).isNull();
+        assertThat(service.registerNewChat(1L)).isNull();
     }
 
     @Test
@@ -70,7 +76,62 @@ public class TgChatServiceTest {
         );
 
         assertThatExceptionOfType(HttpClientErrorException.class)
-            .isThrownBy(() -> service.registerNewChat(1L).block());
+            .isThrownBy(() -> service.registerNewChat(1L));
+    }
+
+    @Test
+    void givenGetRequest_whenCorrectlyAssembled_thenAppropriateHandling() {
+        server.stubFor(
+            WireMock.get(WireMock.urlPathMatching("/tg-chat/[0-9]+"))
+                .willReturn(
+                    WireMock.jsonResponse(GET_CHAT_ANSWER, HttpStatus.OK.value())
+                )
+        );
+
+        UserData expectedValue = new UserData(1L, BotState.MAIN_MENU, Locale.ENGLISH);
+        var actualValue = service.getChat(1L);
+
+        assertThat(actualValue).contains(expectedValue);
+    }
+
+    @Test
+    void givenGetRequest_whenIncorrectlyAssembled_thenException() {
+        server.stubFor(
+            WireMock.get(WireMock.urlMatching("/tg-chat/[0-9]+"))
+                .willReturn(
+                    WireMock.jsonResponse(API_ERROR, HttpStatus.BAD_REQUEST.value())
+                )
+        );
+
+        assertThatExceptionOfType(HttpClientErrorException.class)
+            .isThrownBy(() -> service.getChat(1L));
+    }
+
+    @Test
+    void givenPostRequestWithUpdate_whenCorrectlyAssembled_thenAppropriateHandling() {
+        UserData userData = new UserData(1L, BotState.MAIN_MENU, Locale.ENGLISH);
+        server.stubFor(
+            WireMock.post(WireMock.urlMatching("/tg-chat"))
+                .willReturn(
+                    WireMock.ok()
+                )
+        );
+
+        assertThat(service.updateChat(userData)).isNull();
+    }
+
+    @Test
+    void givenPostRequestWithUpdate_whenIncorrectlyAssembled_thenException() {
+        UserData userData = new UserData(1L, BotState.MAIN_MENU, Locale.ENGLISH);
+        server.stubFor(
+            WireMock.post(WireMock.urlMatching("/tg-chat"))
+                .willReturn(
+                    WireMock.jsonResponse(API_ERROR, HttpStatus.BAD_REQUEST.value())
+                )
+        );
+
+        assertThatExceptionOfType(HttpClientErrorException.class)
+            .isThrownBy(() -> service.updateChat(userData));
     }
 
     @Test
@@ -82,7 +143,7 @@ public class TgChatServiceTest {
                 )
         );
 
-        assertThat(service.deleteChat(1L).block()).isNull();
+        assertThat(service.deleteChat(1L)).isNull();
     }
 
     @Test
@@ -95,6 +156,6 @@ public class TgChatServiceTest {
         );
 
         assertThatExceptionOfType(HttpClientErrorException.class)
-            .isThrownBy(() -> service.deleteChat(1L).block());
+            .isThrownBy(() -> service.deleteChat(1L));
     }
 }

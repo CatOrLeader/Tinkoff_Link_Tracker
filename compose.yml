@@ -4,11 +4,26 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: scrapper
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+  liquibase-migrations:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - postgresql
+    command:
+      - --changelog-file=db.master-changelog.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql:5432/${POSTGRES_DB}
+      - --username=${POSTGRES_USER}
+      - --password=${POSTGRES_PASSWORD}
+      - update
+    volumes:
+      - ./db/migrations:/liquibase/changelog
     networks:
       - backend
 
