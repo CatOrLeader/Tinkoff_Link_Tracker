@@ -18,10 +18,9 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @RequiredArgsConstructor
 public class ClientConfiguration {
-    private final ApplicationConfig config;
-
     private static final ExchangeFilterFunction ERROR_RESPONSE_FILTER =
         ExchangeFilterFunction.ofResponseProcessor(ClientConfiguration::exchangeFilterResponseProcessor);
+    private final ApplicationConfig config;
 
     private static Mono<ClientResponse> exchangeFilterResponseProcessor(ClientResponse response) {
         var statusCode = response.statusCode();

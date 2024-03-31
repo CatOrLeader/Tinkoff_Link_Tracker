@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,6 +22,7 @@ public final class LinksService {
     private static final String HEADER_NAME = "Tg-Chat-Id";
     private final WebClient scrapperWebClient;
 
+    @Retryable
     public Optional<List<Link>> getLinks(long id) {
         var response = scrapperWebClient.get()
             .uri(PATH)
@@ -36,6 +38,7 @@ public final class LinksService {
         );
     }
 
+    @Retryable
     public Link postLink(long id, @NotNull Link link) {
         return scrapperWebClient.post()
             .uri(PATH)
@@ -47,6 +50,7 @@ public final class LinksService {
             .block();
     }
 
+    @Retryable
     public Link deleteLink(long tgChatId, long linkId) {
         return scrapperWebClient.method(HttpMethod.DELETE)
             .uri(PATH)

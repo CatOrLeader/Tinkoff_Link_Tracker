@@ -4,6 +4,20 @@ app:
     scrapper-url: "http://localhost:8080"
   on-startup:
     skip-updates: true
+  retry-politics:
+    max-attempts: 3
+    status-codes: 408, 425, 503, 504, 522, 524
+    type: CONSTANT
+    config:
+      constant:
+        back-off-period: 1000
+      linear:
+        initial-interval: 1000
+        max-interval: 5000
+      exponential:
+        initial-interval: 1000
+        mult: 2
+        max-interval: 100000
 
 spring:
   application:
