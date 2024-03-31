@@ -225,14 +225,14 @@
                             </goals>
                             <configuration>
                                 <excludes>
-                                    <exclude>edu/java/scrapper/configuration/*</exclude>
-                                    <exclude>edu/java/scrapper/github/model/*</exclude>
-                                    <exclude>edu/java/scrapper/stackoverflow/model/*</exclude>
-                                    <exclude>edu/java/scrapper/rest/model/*</exclude>
-                                    <exclude>edu/java/scrapper/rest/api/exceptions/*</exclude>
+                                    <exclude>edu/java/scrapper/configuration/**</exclude>
+                                    <exclude>edu/java/scrapper/github/model/**</exclude>
+                                    <exclude>edu/java/scrapper/stackoverflow/model/**</exclude>
+                                    <exclude>edu/java/scrapper/rest/model/**</exclude>
+                                    <exclude>edu/java/scrapper/rest/api/exceptions/**</exclude>
                                     <exclude>edu/java/scrapper/rest/api/*Api.class</exclude>
-                                    <exclude>edu/java/scrapper/domain/dto/*</exclude>
-                                    <exclude>edu/java/scrapper/domain/jooq/*</exclude>
+                                    <exclude>edu/java/scrapper/domain/dto/**</exclude>
+                                    <exclude>edu/java/scrapper/domain/jooq/**</exclude>
                                 </excludes>
                             </configuration>
                         </execution>
