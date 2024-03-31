@@ -20,7 +20,7 @@ public final class TgChatService {
 
     private final WebClient scrapperWebClient;
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Void registerNewChat(long id) {
         return scrapperWebClient.post()
             .uri(PATH, id)
@@ -29,7 +29,7 @@ public final class TgChatService {
             .block();
     }
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public @NotNull Optional<UserData> getChat(long id) {
         return scrapperWebClient.get()
             .uri(PATH, id)
@@ -39,7 +39,7 @@ public final class TgChatService {
             .blockOptional();
     }
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Void updateChat(@NotNull UserData request) {
         UpdateChatRequest requestToSend = new UpdateChatRequest(request);
 
@@ -51,7 +51,7 @@ public final class TgChatService {
             .block();
     }
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Void deleteChat(long id) {
         return scrapperWebClient.delete()
             .uri(PATH, id)

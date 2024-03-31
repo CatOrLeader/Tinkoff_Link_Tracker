@@ -2,7 +2,7 @@ package edu.java.bot.configuration;
 
 import edu.java.bot.configuration.suppliers.CustomisedRetryPolitics;
 import edu.java.bot.configuration.suppliers.LinearBackOffPolicy;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import jakarta.xml.bind.ValidationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
@@ -11,10 +11,17 @@ import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
 public class RetryPoliticsConfiguration {
-
     @Bean
-    @ConditionalOnProperty(prefix = "app", name = "retry-politics.type", havingValue = "constant")
-    public RetryTemplate constantRetryTemplate(ApplicationConfig config) {
+    public RetryTemplate primaryRetryTemplate(ApplicationConfig config) throws ValidationException {
+        return switch (config.retryPolitics().type()) {
+            case CONSTANT -> constantRetryTemplate(config);
+            case LINEAR -> linearRetryTemplate(config);
+            case EXPONENTIAL -> exponentialRetryTemplate(config);
+            case null -> throw new ValidationException("Incorrect type for the retry politics");
+        };
+    }
+
+    private RetryTemplate constantRetryTemplate(ApplicationConfig config) {
         var politics = config.retryPolitics();
         RetryTemplate template = new RetryTemplate();
 
@@ -30,9 +37,7 @@ public class RetryPoliticsConfiguration {
         return template;
     }
 
-    @Bean
-    @ConditionalOnProperty(prefix = "app", name = "retry-politics.type", havingValue = "linear")
-    public RetryTemplate linearRetryTemplate(ApplicationConfig config) {
+    private RetryTemplate linearRetryTemplate(ApplicationConfig config) {
         var politics = config.retryPolitics();
         RetryTemplate template = new RetryTemplate();
 
@@ -50,9 +55,7 @@ public class RetryPoliticsConfiguration {
         return template;
     }
 
-    @Bean
-    @ConditionalOnProperty(prefix = "app", name = "retry-politics.type", havingValue = "exponential")
-    public RetryTemplate exponentialRetryTemplate(ApplicationConfig config) {
+    private RetryTemplate exponentialRetryTemplate(ApplicationConfig config) {
         var politics = config.retryPolitics();
         RetryTemplate template = new RetryTemplate();
 
@@ -70,3 +73,4 @@ public class RetryPoliticsConfiguration {
         return template;
     }
 }
+

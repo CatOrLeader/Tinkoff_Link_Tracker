@@ -22,7 +22,7 @@ public final class LinksService {
     private static final String HEADER_NAME = "Tg-Chat-Id";
     private final WebClient scrapperWebClient;
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Optional<List<Link>> getLinks(long id) {
         var response = scrapperWebClient.get()
             .uri(PATH)
@@ -38,7 +38,7 @@ public final class LinksService {
         );
     }
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Link postLink(long id, @NotNull Link link) {
         return scrapperWebClient.post()
             .uri(PATH)
@@ -50,7 +50,7 @@ public final class LinksService {
             .block();
     }
 
-    @Retryable
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Link deleteLink(long tgChatId, long linkId) {
         return scrapperWebClient.method(HttpMethod.DELETE)
             .uri(PATH)
