@@ -9,6 +9,7 @@ import edu.java.bot.dialog.handlers.UpdateHandler;
 import edu.java.bot.rest.service.LinksService;
 import java.net.URI;
 import java.util.Locale;
+import javax.cache.CacheManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,12 +17,21 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@SpringBootTest(properties = "app.on-startup.skip-updates=false")
+@SpringBootTest
+@TestPropertySource(properties = {
+    "app.on-startup.skip-updates=false",
+    "bucket4j.enabled=false"
+})
 @ExtendWith(MockitoExtension.class)
+@DirtiesContext
+@MockBean(CacheManager.class)
 public class ResToTrackReceivedHandlerTest {
     private static final long USER_ID = 9L;
     private static final String CORRECT_RES = "https://github.com";

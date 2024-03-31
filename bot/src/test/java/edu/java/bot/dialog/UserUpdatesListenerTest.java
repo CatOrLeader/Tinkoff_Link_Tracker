@@ -9,12 +9,17 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@TestPropertySource(properties = "app.on-startup.skip-updates=false")
+@TestPropertySource(properties = {
+    "app.on-startup.skip-updates=false",
+    "bucket4j.enabled=false"
+})
 @ExtendWith(MockitoExtension.class)
+@DirtiesContext
 public class UserUpdatesListenerTest {
     @Autowired
     private UserUpdatesListener userUpdatesListener;
