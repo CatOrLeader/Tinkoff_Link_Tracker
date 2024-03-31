@@ -11,12 +11,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import javax.cache.CacheManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = "app.on-startup.skip-updates=false")
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@DirtiesContext
+@TestPropertySource(properties = {
+    "app.on-startup.skip-updates=false",
+    "bucket4j.enabled=false"
+})
+@MockBean(CacheManager.class)
 public class UnknownMessageHandlerTest {
     private static final long USER_ID = 6L;
     private static final UserData USER_DATA = new UserData(

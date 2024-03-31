@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
     "bucket4j.enabled=false"
 })
 @ExtendWith(MockitoExtension.class)
-@DirtiesContext
 @MockBean(CacheManager.class)
 public class ResToTrackReceivedHandlerTest {
     private static final long USER_ID = 9L;
