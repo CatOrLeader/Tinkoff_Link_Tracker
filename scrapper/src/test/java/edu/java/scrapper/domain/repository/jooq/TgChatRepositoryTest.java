@@ -4,6 +4,7 @@ import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.dto.TgChat;
 import edu.java.scrapper.domain.repository.TgChatRepository;
 import jakarta.validation.constraints.NotNull;
+import javax.cache.CacheManager;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import javax.cache.CacheManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
