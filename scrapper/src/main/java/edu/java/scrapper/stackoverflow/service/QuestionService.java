@@ -4,6 +4,7 @@ import edu.java.scrapper.stackoverflow.model.QuestionResponse;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class QuestionService {
     private final WebClient stackOverflowWebClient;
 
+    @Retryable(interceptor = "primaryRetryTemplate")
     public QuestionResponse getQuestionById(@NotEmpty String id) {
         return stackOverflowWebClient.get()
             .uri(uriBuilder -> uriBuilder

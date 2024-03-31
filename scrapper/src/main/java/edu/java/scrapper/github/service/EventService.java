@@ -10,6 +10,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -21,6 +22,7 @@ public class EventService {
     private final WebClient githubWebClient;
     private final LinkService linkService;
 
+    @Retryable(interceptor = "primaryRetryTemplate")
     public Optional<PullResponse> getPullByOwnerNameNumber(
         @NotNull URI originalUrl,
         @NotBlank String owner,
@@ -54,6 +56,7 @@ public class EventService {
         }
     }
 
+    @Retryable
     public Optional<IssueResponse> getIssueByOwnerNameNumber(
         @NotNull URI originalUrl,
         @NotBlank String owner,

@@ -4,6 +4,7 @@ import edu.java.scrapper.rest.model.LinkUpdateRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class UpdatesService {
     private final WebClient botWebClient;
 
+    @Retryable(interceptor = "primaryRetryTemplate")
     public ResponseEntity<Void> postLinkUpdate(@NotNull LinkUpdateRequest update) {
         return botWebClient.post()
             .uri("/updates")
