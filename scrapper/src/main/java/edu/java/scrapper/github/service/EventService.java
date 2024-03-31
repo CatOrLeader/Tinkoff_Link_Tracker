@@ -1,14 +1,17 @@
 package edu.java.scrapper.github.service;
 
 import edu.java.scrapper.domain.service.LinkService;
+import edu.java.scrapper.github.model.IssueEventResponse;
 import edu.java.scrapper.github.model.IssueResponse;
 import edu.java.scrapper.github.model.PullResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -38,7 +41,7 @@ public class EventService {
                 .header(HttpHeaders.IF_NONE_MATCH, link == null ? "" : link.getEtag())
                 .retrieve()
                 .toEntity(PullResponse.class)
-                .doOnError(throwable -> log.error(throwable.toString()))
+                .doOnError(log::error)
                 .filter(entity -> entity.getStatusCode().is2xxSuccessful()
                                   || entity.getStatusCode().is3xxRedirection())
                 .flatMap(entity -> {
@@ -72,7 +75,7 @@ public class EventService {
                 .header(HttpHeaders.IF_NONE_MATCH, link == null ? "" : link.getEtag())
                 .retrieve()
                 .toEntity(IssueResponse.class)
-                .doOnError(throwable -> log.error(throwable.toString()))
+                .doOnError(log::error)
                 .filter(entity -> entity.getStatusCode().is2xxSuccessful()
                                   || entity.getStatusCode().is3xxRedirection())
                 .flatMap(entity -> {
@@ -86,6 +89,39 @@ public class EventService {
                 .block());
         } catch (NullPointerException e) {
             log.error(e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
+    public Optional<IssueEventResponse> getIssueLastEventByOwnerNameNumber(
+        @NotBlank String owner,
+        @NotBlank String name,
+        int number
+    ) {
+        ParameterizedTypeReference<List<IssueEventResponse>> type = new ParameterizedTypeReference<>() {
+        };
+
+        try {
+            return Optional.ofNullable(githubWebClient
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/repos/{owner}/{name}/issues/{number}/events")
+                    .queryParam("per_page", 1)
+                    .build(owner, name, number))
+                .retrieve()
+                .toEntity(type)
+                .doOnError(log::error)
+                .flatMap(nested -> {
+                    var body = nested.getBody();
+                    if (body == null) {
+                        log.warn("Body is missing");
+                        return Mono.empty();
+                    }
+
+                    return Mono.justOrEmpty(body.getFirst());
+                })
+                .block());
+        } catch (NullPointerException e) {
+            log.error(e);
             return Optional.empty();
         }
     }

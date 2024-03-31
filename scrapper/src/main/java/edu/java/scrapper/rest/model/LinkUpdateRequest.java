@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public record LinkUpdateRequest(@Min(0) long id, @NotNull URI url, @NotBlank String description,
                                 @NotEmpty List<GetChatResponse> tgChatIds) {
     public LinkUpdateRequest(@NotNull Link link, @NotEmpty Collection<TgChat> tgChats) {
-        this(link.getId(), link.getUri(), link.getDescription(),
+        this(link.getId(), link.getUri(), link.toString(),
             tgChats.stream().map(GetChatResponse::new).collect(Collectors.toList())
         );
     }

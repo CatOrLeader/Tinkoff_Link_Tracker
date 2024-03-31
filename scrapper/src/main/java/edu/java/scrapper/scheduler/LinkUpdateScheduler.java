@@ -43,12 +43,17 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
     )
     public void update() {
         OffsetDateTime toCheck = Instant.now().atOffset(ZoneOffset.ofHours(OFFSET_HOURS)).minus(scheduler.interval());
+
         linkService.findAllBefore(toCheck).forEach(
             link -> fetchLinkFromExternalSource(link)
                 .filter(this::updateLinkAndLastCheckedTime)
                 .filter(link1 -> isUpdatedFromSource(link, link1))
                 .ifPresentOrElse(
-                    (this::postToUsers),
+                    link1 -> {
+                        accumulateDescriptionAndUpdater(link1);
+                        postToUsers(link1);
+                        updateLinkAndLastCheckedTime(link1);
+                    },
                     () -> updateLinkAndLastCheckedTime(link)
                 )
         );
@@ -114,6 +119,29 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
         updatesService.postLinkUpdate(
             new LinkUpdateRequest(link, tgChatService.findAllByLinkUrl(link.getUri()))
         );
+    }
+
+    private void accumulateDescriptionAndUpdater(Link link) {
+        String url = link.getUri().toString();
+        List<String> params = LinkUtils.extractOwnerNameNumber(url);
+
+        switch (link.getType()) {
+            case GITHUB_ISSUE -> eventService.getIssueLastEventByOwnerNameNumber(
+                params.getFirst(),
+                params.get(1),
+                Integer.parseInt(params.getLast())
+            ).ifPresent(issueEventResponse -> {
+                if (!issueEventResponse.createdAt().isEqual(link.getUpdatedAt())) {
+                    return;
+                }
+
+                link.setDescription(issueEventResponse.toString());
+                link.setUpdatedBy(issueEventResponse.user().login());
+            });
+            case GITHUB_PULL, SFO_QUESTION -> {
+            }
+            case null, default -> log.error("Error when fetching the link's last event: " + link);
+        }
     }
 
     private boolean isUpdatedFromSource(Link previousLink, Link link) {

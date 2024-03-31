@@ -5,7 +5,7 @@ app:
     stackoverflow-url: "https://api.stackexchange.com"
     bot-url: "http://localhost:8090"
   scheduler:
-    enable: false
+    enable: true
     interval: 30s
     force-check-delay: 30s
   database-access-type: JPA
@@ -39,7 +39,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
   cache:
     cache-names:
       - rate-limit-buckets
@@ -49,7 +49,7 @@ spring:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
 
 bucket4j:
-  enabled: true
+  enabled: false
   filters:
     - cache-name: rate-limit-buckets
       url: .*

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import static edu.java.scrapper.utils.DateTimeUtils.OFFSET_HOURS;
+import static edu.java.scrapper.utils.DateTimeUtils.VERBOSE_DATETIME;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -77,5 +78,15 @@ public class Link {
             link.getCreatedAt(), link.getUpdatedAt(), link.getCreatedBy(), link.getUpdatedBy(), link.getTitle(),
             link.getEtag(), link.getLastCheckedAt(), link.getType()
         );
+    }
+
+    @Override
+    public String toString() {
+        return "The '" + title
+               + "' with the description: \n\n--------------------" + description
+               + "\n--------------------\n\n Created at " + createdAt.format(VERBOSE_DATETIME)
+               + (createdBy != null ? " by " + createdAt : "")
+               + (updatedBy != null ? " ---- is updated by " + updatedBy : "")
+               + (updatedAt != null ? " at " + updatedAt.format(VERBOSE_DATETIME) : "");
     }
 }

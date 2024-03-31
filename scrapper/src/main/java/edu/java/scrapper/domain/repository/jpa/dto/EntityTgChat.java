@@ -30,12 +30,10 @@ public class EntityTgChat {
 
     @Column(nullable = false,
             columnDefinition = "varchar(32) default 'UNINITIALIZED'::character varying not null'")
-    @Generated(event = EventType.INSERT)
     private @NotBlank String dialogState;
 
     @Column(nullable = false,
             columnDefinition = "varchar(4) default 'en'")
-    @Generated(event = EventType.INSERT)
     private @NotBlank String languageTag;
 
     @ManyToMany
