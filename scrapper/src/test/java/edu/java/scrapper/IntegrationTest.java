@@ -16,11 +16,15 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import javax.cache.CacheManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
@@ -56,10 +60,12 @@ public abstract class IntegrationTest {
     }
 
     @DynamicPropertySource
-    static void jdbcProperties(@NotNull DynamicPropertyRegistry registry) {
+    static void dynamicPropertyConfiguration(@NotNull DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+
+        registry.add("bucket4j.enabled", () -> "false");
     }
 }
 
