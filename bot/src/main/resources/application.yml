@@ -6,6 +6,7 @@ app:
     skip-updates: true
   kafka:
     topic-name: "LinkUpdates"
+    dlq-name: "LinkUpdates_dlq"
     group-id: "single bot client"
   retry-politics:
     max-attempts: 3

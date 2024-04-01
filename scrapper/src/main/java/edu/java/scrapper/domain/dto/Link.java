@@ -87,7 +87,7 @@ public class Link {
                + "' with the description: \n\n--------------------\n" + description + "\n--------------------\n\n"
                + (createdBy != null ? "The source is updated by " + createdBy : "")
                + (createdAt != null ? " at " + createdAt.format(VERBOSE_DATETIME) : "")
-               + (updatedBy != null ? "\n The source is updated by " + updatedBy : "")
+               + (updatedBy != null ? "\nThe source is updated by " + updatedBy : "")
                + (updatedAt != null ? " at " + updatedAt.format(VERBOSE_DATETIME) : "");
     }
 }
