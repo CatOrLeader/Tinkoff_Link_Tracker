@@ -1,4 +1,5 @@
 app:
+  use-queue: true
   clients:
     github-url: "https://api.github.com"
     github-api-token: ${GITHUB_API_TOKEN}
@@ -9,6 +10,8 @@ app:
     interval: 30s
     force-check-delay: 30s
   database-access-type: JPA
+  kafka:
+    topic-name: "LinkUpdates"
   retry-politics:
     max-attempts: 3
     status-codes: 408, 425, 503, 504, 522, 524
@@ -47,6 +50,8 @@ spring:
       spec: maximumSize=100000, expireAfterAccess=90s
     jcache:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+  kafka:
+    bootstrap-servers: "localhost:9092"
 
 bucket4j:
   enabled: false

@@ -22,6 +22,8 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @RequiredArgsConstructor
 public class EventService {
+    private static final int MAX_POSSIBLE_ENTITIES = 1000;
+
     private final WebClient githubWebClient;
     private final LinkService linkService;
 
@@ -105,7 +107,7 @@ public class EventService {
             return Optional.ofNullable(githubWebClient
                 .get()
                 .uri(uriBuilder -> uriBuilder.path("/repos/{owner}/{name}/issues/{number}/events")
-                    .queryParam("per_page", 1)
+                    .queryParam("per_page", MAX_POSSIBLE_ENTITIES)
                     .build(owner, name, number))
                 .retrieve()
                 .toEntity(type)
@@ -117,7 +119,7 @@ public class EventService {
                         return Mono.empty();
                     }
 
-                    return Mono.justOrEmpty(body.getFirst());
+                    return Mono.justOrEmpty(body.getLast());
                 })
                 .block());
         } catch (NullPointerException e) {

@@ -14,7 +14,7 @@ public class UpdatesService {
     private final WebClient botWebClient;
 
     @Retryable(interceptor = "primaryRetryTemplate")
-    public ResponseEntity<Void> postLinkUpdate(@NotNull LinkUpdateRequest update) {
+    public ResponseEntity<Void> send(@NotNull LinkUpdateRequest update) {
         return botWebClient.post()
             .uri("/updates")
             .bodyValue(update)

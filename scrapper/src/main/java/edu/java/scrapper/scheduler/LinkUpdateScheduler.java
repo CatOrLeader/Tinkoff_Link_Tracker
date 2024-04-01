@@ -1,12 +1,12 @@
 package edu.java.scrapper.scheduler;
 
+import edu.java.scrapper.bot.UpdateNotifier;
 import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.domain.dto.Link;
 import edu.java.scrapper.domain.service.LinkService;
 import edu.java.scrapper.domain.service.TgChatService;
 import edu.java.scrapper.github.service.EventService;
 import edu.java.scrapper.rest.model.LinkUpdateRequest;
-import edu.java.scrapper.rest.service.UpdatesService;
 import edu.java.scrapper.stackoverflow.service.QuestionService;
 import edu.java.scrapper.utils.DateTimeUtils;
 import edu.java.scrapper.utils.LinkUtils;
@@ -35,7 +35,7 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
     private final TgChatService tgChatService;
     private final EventService eventService;
     private final QuestionService questionService;
-    private final UpdatesService updatesService;
+    private final UpdateNotifier updatesService;
 
     @Override
     @Scheduled(
@@ -116,7 +116,7 @@ public final class LinkUpdateScheduler implements UpdateScheduler {
     }
 
     private void postToUsers(Link link) {
-        updatesService.postLinkUpdate(
+        updatesService.send(
             new LinkUpdateRequest(link, tgChatService.findAllByLinkUrl(link.getUri()))
         );
     }

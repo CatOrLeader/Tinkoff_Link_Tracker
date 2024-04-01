@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
+    boolean useQueue,
     @NotNull
     @Bean
     Scheduler scheduler,
@@ -23,7 +24,9 @@ public record ApplicationConfig(
     @Name("database-access-type")
     DatabaseAccessType databaseAccessType,
     @NotNull
-    Retry retryPolitics
+    Retry retryPolitics,
+    @NotNull
+    Kafka kafka
 ) {
     public enum DatabaseAccessType {
         JDBC, JPA, JOOQ
@@ -57,5 +60,9 @@ public record ApplicationConfig(
             public record Exponential(@Min(0) long initialInterval, @Min(0) long mult, @Min(0) long maxInterval) {
             }
         }
+    }
+
+    @Validated
+    public record Kafka(@NotBlank String topicName) {
     }
 }
