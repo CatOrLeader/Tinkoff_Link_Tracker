@@ -3,6 +3,7 @@ package edu.java.scrapper.domain.repository.jooq;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.dto.TgChat;
 import edu.java.scrapper.domain.repository.TgChatRepository;
+import edu.java.scrapper.kafka.ScrapperQueueProducer;
 import jakarta.validation.constraints.NotNull;
 import javax.cache.CacheManager;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @MockBean(CacheManager.class)
+@MockBean(ScrapperQueueProducer.class)
 public class TgChatRepositoryTest extends IntegrationTest {
     @Autowired
     private TgChatRepository tgChatRepository;

@@ -5,6 +5,7 @@ import edu.java.scrapper.domain.dto.Link;
 import edu.java.scrapper.domain.dto.ResponseType;
 import edu.java.scrapper.domain.repository.LinkRepository;
 import edu.java.scrapper.domain.repository.TgChatRepository;
+import edu.java.scrapper.kafka.ScrapperQueueProducer;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.sql.Timestamp;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @MockBean(CacheManager.class)
+@MockBean(ScrapperQueueProducer.class)
 public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository linkRepository;

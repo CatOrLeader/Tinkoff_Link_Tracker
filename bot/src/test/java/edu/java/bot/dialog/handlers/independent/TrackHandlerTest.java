@@ -22,7 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 @TestPropertySource(properties = {
     "app.on-startup.skip-updates=false",
-    "bucket4j.enabled=false"
+    "bucket4j.enabled=false",
+    "app.kafka.enabled=false",
+    "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration"
 })
 @MockBean(CacheManager.class)
 public class TrackHandlerTest {

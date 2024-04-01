@@ -56,6 +56,7 @@ public record ApplicationConfig(
     }
 
     @Validated
-    public record Kafka(@NotBlank String topicName, @NotBlank String dlqName, @NotBlank String groupId) {
+    public record Kafka(boolean enabled, @NotBlank String topicName, @NotBlank String dlqName,
+                        @NotBlank String groupId) {
     }
 }

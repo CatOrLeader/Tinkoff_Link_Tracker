@@ -63,6 +63,6 @@ public record ApplicationConfig(
     }
 
     @Validated
-    public record Kafka(@NotBlank String topicName) {
+    public record Kafka(boolean enabled, @NotBlank String topicName) {
     }
 }

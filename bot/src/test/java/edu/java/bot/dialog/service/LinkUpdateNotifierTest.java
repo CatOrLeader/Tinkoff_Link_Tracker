@@ -13,7 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-@SpringBootTest(properties = "app.on-startup.skip-updates=false")
+@SpringBootTest(properties = {
+    "app.on-startup.skip-updates=false",
+    "bucket4j.enabled=false",
+    "app.kafka.enabled=false",
+    "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration"
+})
 @ExtendWith(MockitoExtension.class)
 public class LinkUpdateNotifierTest {
 

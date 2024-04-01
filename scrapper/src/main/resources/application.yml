@@ -11,6 +11,7 @@ app:
     force-check-delay: 30s
   database-access-type: JPA
   kafka:
+    enabled: true
     topic-name: "LinkUpdates"
   retry-politics:
     max-attempts: 3

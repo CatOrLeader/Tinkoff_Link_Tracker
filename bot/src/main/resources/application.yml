@@ -5,6 +5,7 @@ app:
   on-startup:
     skip-updates: true
   kafka:
+    enabled: true
     topic-name: "LinkUpdates"
     dlq-name: "LinkUpdates_dlq"
     group-id: "single bot client"

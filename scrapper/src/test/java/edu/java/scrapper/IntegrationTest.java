@@ -62,6 +62,11 @@ public abstract class IntegrationTest {
         registry.add("spring.datasource.password", POSTGRES::getPassword);
 
         registry.add("bucket4j.enabled", () -> "false");
+        registry.add(
+            "spring.autoconfigure.exclude",
+            () -> "org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration"
+        );
+        registry.add("app.kafka.enabled", () -> "false");
     }
 }
 
