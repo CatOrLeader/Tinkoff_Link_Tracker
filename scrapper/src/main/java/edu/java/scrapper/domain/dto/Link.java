@@ -80,13 +80,14 @@ public class Link {
         );
     }
 
+    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     @Override
     public String toString() {
         return "The '" + title
-               + "' with the description: \n\n--------------------" + description
-               + "\n--------------------\n\n Created at " + createdAt.format(VERBOSE_DATETIME)
-               + (createdBy != null ? " by " + createdAt : "")
-               + (updatedBy != null ? " ---- is updated by " + updatedBy : "")
+               + "' with the description: \n\n--------------------\n" + description + "\n--------------------\n\n"
+               + (createdBy != null ? "The source is updated by " + createdBy : "")
+               + (createdAt != null ? " at " + createdAt.format(VERBOSE_DATETIME) : "")
+               + (updatedBy != null ? "\n The source is updated by " + updatedBy : "")
                + (updatedAt != null ? " at " + updatedAt.format(VERBOSE_DATETIME) : "");
     }
 }

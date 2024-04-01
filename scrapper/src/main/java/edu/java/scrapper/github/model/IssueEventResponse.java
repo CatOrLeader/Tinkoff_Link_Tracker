@@ -19,7 +19,7 @@ public record IssueEventResponse(
 ) {
     @Override
     public String toString() {
-        return "User: " + user.login() + " ------ Event: " + event + " ------ Created at: "
+        return "- User: " + user.login() + "\n- Event: " + event + "\n- Created at: "
                + createdAt.format(VERBOSE_DATETIME);
     }
 }

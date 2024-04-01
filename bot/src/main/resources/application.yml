@@ -4,6 +4,9 @@ app:
     scrapper-url: "http://localhost:8080"
   on-startup:
     skip-updates: true
+  kafka:
+    topic-name: "LinkUpdates"
+    group-id: "single bot client"
   retry-politics:
     max-attempts: 3
     status-codes: 408, 425, 503, 504, 522, 524
@@ -24,6 +27,8 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
+  kafka:
+    bootstrap-servers: "localhost:9092"
   cache:
     cache-names:
       - rate-limit-buckets

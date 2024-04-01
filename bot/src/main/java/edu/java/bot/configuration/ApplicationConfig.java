@@ -19,7 +19,9 @@ public record ApplicationConfig(
     @NotNull
     Clients clients,
     @NotNull
-    Retry retryPolitics
+    Retry retryPolitics,
+    @NotNull
+    Kafka kafka
 ) {
     @Validated
     public record OnStartup(
@@ -51,5 +53,9 @@ public record ApplicationConfig(
             public record Exponential(@Min(0) long initialInterval, @Min(0) long mult, @Min(0) long maxInterval) {
             }
         }
+    }
+
+    @Validated
+    public record Kafka(@NotBlank String topicName, @NotBlank String groupId) {
     }
 }
