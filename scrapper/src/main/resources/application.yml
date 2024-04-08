@@ -27,6 +27,8 @@ app:
         initial-interval: 1000
         mult: 2
         max-interval: 100000
+  metrics:
+    counter-enabled: true
 
 spring:
   application:
@@ -53,6 +55,27 @@ spring:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
   kafka:
     bootstrap-servers: "localhost:9092"
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "health,info,prometheus"
+      path-mapping:
+        "prometheus": "/metrics"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      "application": ${spring.application.name}
 
 bucket4j:
   enabled: false

@@ -84,10 +84,12 @@ public class Link {
     @Override
     public String toString() {
         return "The '" + title
-               + "' with the description: \n\n--------------------\n" + description + "\n--------------------\n\n"
-               + (createdBy != null ? "The source is updated by " + createdBy : "")
+               + "' with the description: \n\n--------------------\n" + description + "...\n--------------------\n\n"
+               + "The source is created"
+               + (createdBy != null ? " by " + createdBy : "")
                + (createdAt != null ? " at " + createdAt.format(VERBOSE_DATETIME) : "")
-               + (updatedBy != null ? "\nThe source is updated by " + updatedBy : "")
+               + "\nThe source is updated"
+               + (updatedBy != null ? " by " + updatedBy : "")
                + (updatedAt != null ? " at " + updatedAt.format(VERBOSE_DATETIME) : "");
     }
 }

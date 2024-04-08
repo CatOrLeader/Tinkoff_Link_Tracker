@@ -23,6 +23,8 @@ app:
         initial-interval: 1000
         mult: 2
         max-interval: 100000
+  metrics:
+    counter-enabled: true
 
 spring:
   application:
@@ -38,6 +40,28 @@ spring:
       spec: maximumSize=100000, expireAfterAccess=90s
     jcache:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "health,info,prometheus"
+      path-mapping:
+        "prometheus": "/metrics"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      "application": ${spring.application.name}
+
 
 bucket4j:
   enabled: true

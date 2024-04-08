@@ -26,7 +26,8 @@ public record ApplicationConfig(
     @NotNull
     Retry retryPolitics,
     @NotNull
-    Kafka kafka
+    Kafka kafka,
+    @NotNull Metrics metrics
 ) {
     public enum DatabaseAccessType {
         JDBC, JPA, JOOQ
@@ -64,5 +65,9 @@ public record ApplicationConfig(
 
     @Validated
     public record Kafka(boolean enabled, @NotBlank String topicName) {
+    }
+
+    @Validated
+    public record Metrics(boolean counterEnabled) {
     }
 }

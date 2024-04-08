@@ -21,7 +21,8 @@ public record ApplicationConfig(
     @NotNull
     Retry retryPolitics,
     @NotNull
-    Kafka kafka
+    Kafka kafka,
+    @NotNull Metrics metrics
 ) {
     @Validated
     public record OnStartup(
@@ -58,5 +59,9 @@ public record ApplicationConfig(
     @Validated
     public record Kafka(boolean enabled, @NotBlank String topicName, @NotBlank String dlqName,
                         @NotBlank String groupId) {
+    }
+
+    @Validated
+    public record Metrics(boolean counterEnabled) {
     }
 }

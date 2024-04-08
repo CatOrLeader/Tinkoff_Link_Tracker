@@ -29,7 +29,6 @@ services:
   zoo1:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zoo1
-    container_name: zoo1
     ports:
       - "2181:2181"
     environment:
@@ -41,7 +40,6 @@ services:
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
     hostname: kafka1
-    container_name: kafka1
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -64,6 +62,22 @@ services:
       - kafka:/var/lib/kafka/data
     depends_on:
       - zoo1
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - ./prometheus:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
 volumes:
   postgresql: { }
