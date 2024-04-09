@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/bot.yml
       - bot/**
+      - bot.Dockerfile
 
 env:
   REGISTRY: ghcr.io
