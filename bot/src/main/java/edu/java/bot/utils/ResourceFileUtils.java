@@ -1,10 +1,9 @@
 package edu.java.bot.utils;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Objects;
+import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 public final class ResourceFileUtils {
     private ResourceFileUtils() {
@@ -15,8 +14,8 @@ public final class ResourceFileUtils {
         return filename.replaceAll(extPattern, "");
     }
 
-    public static @NotNull File getResourceRootFolder() throws URISyntaxException {
-        URL rootUri = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("."));
-        return new File(rootUri.toURI());
+    public static @NotNull Resource[] getAllLocalizations() throws IOException {
+        var resolver = new PathMatchingResourcePatternResolver();
+        return resolver.getResources("classpath:/lang/*.json");
     }
 }

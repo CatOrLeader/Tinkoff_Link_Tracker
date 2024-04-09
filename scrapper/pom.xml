@@ -11,6 +11,10 @@
 
     <artifactId>scrapper</artifactId>
     <version>${revision}</version>
+    <packaging>jar</packaging>
+
+    <name>Scrapper Server</name>
+    <description>Server with the collecting and notification possibilities</description>
 
     <dependencies>
         <!-- Web -->

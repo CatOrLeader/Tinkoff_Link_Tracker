@@ -1,0 +1,89 @@
+app:
+  telegram-token: ${BOT_TOKEN}
+  clients:
+    scrapper-url: "http://host.docker.internal:8080"
+  on-startup:
+    skip-updates: true
+  kafka:
+    enabled: true
+    topic-name: "LinkUpdates"
+    dlq-name: "LinkUpdates_dlq"
+    group-id: "single bot client"
+  retry-politics:
+    max-attempts: 3
+    status-codes: 408, 425, 503, 504, 522, 524
+    type: CONSTANT
+    config:
+      constant:
+        back-off-period: 1000
+      linear:
+        initial-interval: 1000
+        max-interval: 5000
+      exponential:
+        initial-interval: 1000
+        mult: 2
+        max-interval: 100000
+  metrics:
+    counter-enabled: true
+
+spring:
+  application:
+    name: bot
+  jackson:
+    time-zone: UTC
+  kafka:
+    bootstrap-servers: "host.docker.internal:29092"
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000, expireAfterAccess=90s
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "health,info,prometheus"
+      path-mapping:
+        "prometheus": "/metrics"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      "application": ${spring.application.name}
+
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      url: .*
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"You have exhausted your API Request Quota\" }"
+      rate-limits:
+        - bandwidths:
+            - capacity: 30
+              refill-capacity: 30
+              time: 2
+              unit: seconds
+              initial-capacity: 30
+              refill-speed: interval
+
+server:
+  port: 8090
+
+logging:
+  config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui"

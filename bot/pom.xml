@@ -11,6 +11,10 @@
 
     <artifactId>bot</artifactId>
     <version>${revision}</version>
+    <packaging>jar</packaging>
+
+    <name>Bot</name>
+    <description>Telegram bot for immediate notifications</description>
 
     <dependencies>
         <!-- Web -->

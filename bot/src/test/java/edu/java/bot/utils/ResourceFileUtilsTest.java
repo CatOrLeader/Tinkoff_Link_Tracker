@@ -1,12 +1,12 @@
 package edu.java.bot.utils;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.core.io.Resource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResourceFileUtilsTest {
@@ -25,14 +25,14 @@ public class ResourceFileUtilsTest {
     }
 
     @Test
-    void getCorrectResourceFolder() throws URISyntaxException {
-        File expectedFolder =
-            new File(Objects.requireNonNull(Objects.requireNonNull(ResourceFileUtilsTest.class.getResource("."))
-                .getFile()));
-        File actualFolder = ResourceFileUtils.getResourceRootFolder();
+    void getCorrectLocalization() throws IOException {
+        Resource[] actualLocalizations = ResourceFileUtils.getAllLocalizations();
 
-        assertThat(
-            Path.of(actualFolder.getAbsolutePath(), "edu", "java", "bot", "utils")
-                .toString()).isEqualTo(expectedFolder.getAbsolutePath());
+        var engRes = Mockito.mock(Resource.class);
+        Mockito.when(engRes.getFilename()).thenReturn("en.json");
+        Resource[] expectedLocalizations = new Resource[] {engRes};
+
+        assertThat(Arrays.stream(actualLocalizations).map(Resource::getFilename).toList())
+            .containsExactlyElementsOf(Arrays.stream(expectedLocalizations).map(Resource::getFilename).toList());
     }
 }

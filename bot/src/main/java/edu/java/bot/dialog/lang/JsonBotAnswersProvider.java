@@ -3,10 +3,7 @@ package edu.java.bot.dialog.lang;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.bot.utils.ResourceFileUtils;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -14,6 +11,7 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,17 +30,17 @@ public final class JsonBotAnswersProvider implements BotAnswersProvider {
         };
 
         try {
-            File rootFolder = ResourceFileUtils.getResourceRootFolder();
-            File localizationFolder = Paths.get(rootFolder.getAbsolutePath(), "lang").toFile();
+            Resource[] localizations = ResourceFileUtils.getAllLocalizations();
 
-            for (File localizationSource : Objects.requireNonNull(localizationFolder.listFiles())) {
+            for (var localizationSource : localizations) {
                 Locale locale =
-                    Locale.forLanguageTag(ResourceFileUtils.getFileNameWithoutExtension(localizationSource.getName()));
-                var answers = mapper.readValue(localizationSource, typeReference);
+                    Locale.forLanguageTag(ResourceFileUtils.getFileNameWithoutExtension(Objects.requireNonNull(
+                        localizationSource.getFilename())));
+                var answers = mapper.readValue(localizationSource.getContentAsByteArray(), typeReference);
 
                 runtimeAnswersMap.put(locale, answers);
             }
-        } catch (URISyntaxException | IOException e) {
+        } catch (IOException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
         }
