@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-meta-extensions-liquibase</artifactId>
-            <version>3.19.6</version>
+            <version>3.19.18</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
